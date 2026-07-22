@@ -958,9 +958,9 @@ async function loadUpcoming(){
   }).join('');
 }
 
-/* ═══════════ 노래책 (두미 로직 · 18곡/페이지) ═══════════ */
+/* ═══════════ 노래책 (두미 로직 · 17곡/페이지) ═══════════ */
 const GENRE_LABELS = { kpop:'Kpop', jpop:'Jpop', pop:'Pop', etc:'기타' };
-const SONG_PAGE = 18;   // 940×1350 안에 들어가는 최대 행 수
+const SONG_PAGE = 17;   // 940×1350 + 페이지네이션 표시 상태에서의 최대 행 수
 let allSongs = [], songGenre = 'all', songSearch = '', songPage = 1;
 function genreClass(g){ return ({kpop:'gb-kpop',jpop:'gb-jpop',pop:'gb-pop'})[g] || 'gb-etc'; }
 function starsHTML(n){
@@ -1035,7 +1035,7 @@ $('#randCopy').addEventListener('click', () => {
 });
 
 /* ═══════════ 업보 (두미 로직 · 20명/페이지) ═══════════ */
-const UPBO_PAGE = 20;
+const UPBO_PAGE = 20;   // 5줄 × 4열 — 940×1350 한계치 (24명=6줄이면 77px 초과)
 let allMembers = [], memberTasks = {}, upboPage = 1, upboList = [];
 function nickRank(s){
   const c = (s||'').trim().charAt(0);
