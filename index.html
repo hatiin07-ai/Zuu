@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=940">
 <title>쮸 · Zuu 💗 프로필</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<meta name="theme-color" content="#f27ba9">
 <!-- ── 링크 공유 썸네일 (Open Graph / 트위터 카드) ── -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="쮸 · Zuu">
@@ -192,12 +195,11 @@ nav.tabs button.active{background:var(--pink-soft);color:var(--pink-deep)}
 .name-desc{margin-top:8px;font-size:.85rem;color:var(--ink);font-weight:500}
 .name-desc::before{content:'♡ ';color:var(--pink)}
 .name-actions{margin-top:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.btn-yt{background:#fff;border:1.5px solid var(--line);color:var(--pink-deep);font-size:.78rem;font-weight:700;
-  border-radius:99px;padding:8px 16px;transition:all .2s;display:inline-flex;align-items:center;gap:5px}
-.btn-yt:hover{border-color:var(--pink);background:var(--pink-pale)}
-.btn-pink{background:var(--pink);color:#fff;font-size:.78rem;font-weight:700;border-radius:99px;padding:9px 18px;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-line2{background:#fff;border:1.5px solid var(--line);color:var(--pink-deep);font-size:.78rem;font-weight:700;
+  border-radius:99px;padding:9px 20px;transition:all .2s;display:inline-flex;align-items:center;white-space:nowrap}
+.btn-line2:hover{border-color:var(--pink);background:var(--pink-pale);transform:translateY(-1px)}
+.btn-pink{background:var(--pink);color:#fff;font-size:.78rem;font-weight:700;border-radius:99px;padding:10px 22px;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
 .btn-pink:hover{background:var(--pink-deep);transform:translateY(-1px)}
-.dots-deco{margin-left:auto;color:var(--muted);letter-spacing:2px;font-weight:800}
 
 /* ── 히어로 우측: 배너 데코 (아바타는 #avatarBg 고정 레이어) ── */
 .hero-right{position:relative;min-height:620px}
@@ -215,11 +217,6 @@ nav.tabs button.active{background:var(--pink-soft);color:var(--pink-deep)}
 .side-tab{position:absolute;right:-10px;top:44px;z-index:4;background:#fff;border:1px solid var(--line);border-radius:16px;
   padding:16px 9px;writing-mode:vertical-rl;font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:1.5px;box-shadow:var(--shadow)}
 .side-tab b{color:var(--pink-deep)}
-.float-btns{position:absolute;right:-4px;top:300px;z-index:4;display:flex;flex-direction:column;gap:12px}
-.fb{width:46px;height:46px;border-radius:16px;background:var(--pink);color:#fff;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 8px 18px rgba(242,123,169,.35);transition:all .2s}
-.fb:hover{background:var(--pink-deep);transform:translateY(-2px)}
-.fb svg{width:20px;height:20px}
 
 /* ── 하단 어바웃미 · 갤러리 (2/3) ── */
 .bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:20px;align-items:stretch}
@@ -559,9 +556,10 @@ friends +</div>
           </div>
           <p class="name-desc" data-pf="p_desc">노래하는 걸 제일 좋아하는 버튜버, 쮸에요.</p>
           <div class="name-actions">
-            <a class="btn-pink" data-station href="https://www.sooplive.com/station/zuu1028" target="_blank" rel="noopener">🎬 방송국 바로가기</a>
-            <a class="btn-yt" id="ytBtn" data-yt href="https://www.youtube.com/@zuu_1028" target="_blank" rel="noopener">▶ 다시보기</a>
-            <span class="dots-deco">···</span>
+            <a class="btn-pink" data-station href="https://www.sooplive.com/station/zuu1028" target="_blank" rel="noopener">방송국</a>
+            <a class="btn-line2" id="ytBtn" data-yt href="https://www.youtube.com/@zuu_1028" target="_blank" rel="noopener">유튜브</a>
+            <a class="btn-line2" id="cafeBtn" data-cafe href="https://cafe.naver.com/zuu102812" target="_blank" rel="noopener">카페</a>
+            <a class="btn-line2" id="fancimBtn" data-fancim href="https://fancim.me/celeb/profile.aspx?cu_id=9JY2fg3SZadrWaB+nRfKYw==" target="_blank" rel="noopener">팬심</a>
           </div>
         </div>
       </div>
@@ -573,14 +571,6 @@ friends +</div>
           <p>메인 아바타 이미지 자리<br><code>assets/avatar.webp</code> 또는 <code>assets/avatar.png</code><br>업로드하면 전체 배경에 표시돼요</p>
         </div>
         <div class="side-tab">0<b>1</b>. My Profile <b>♥</b></div>
-        <div class="float-btns">
-          <a class="fb" data-station href="https://www.sooplive.com/station/zuu1028" target="_blank" rel="noopener" title="방송국 놀러가기" aria-label="방송국 놀러가기">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.4"/><path d="M3.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5"/><path d="M18 6v6M21 9h-6"/></svg>
-          </a>
-          <button class="fb" id="floatMail" title="문의하기" aria-label="문의하기">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.3c0 4-4 7.2-9 7.2-1 0-1.9-.1-2.8-.3L4 20l1.4-3.4C4 15.2 3 13.4 3 11.3c0-4 4-7.2 9-7.2s9 3.2 9 7.2Z"/></svg>
-          </button>
-        </div>
       </div>
     </div>
 
@@ -826,9 +816,9 @@ async function loadProfileSettings(){
     if (s.p_station_url && s.p_station_url.trim()){
       document.querySelectorAll('[data-station]').forEach(a => a.href = s.p_station_url.trim());
     }
-    if (s.p_youtube_url && s.p_youtube_url.trim()){
-      document.querySelectorAll('[data-yt]').forEach(a => a.href = s.p_youtube_url.trim());
-    }
+    [['p_youtube_url','data-yt'], ['p_cafe_url','data-cafe'], ['p_fancim_url','data-fancim']].forEach(([k, attr]) => {
+      if (s[k] && s[k].trim()) document.querySelectorAll('[' + attr + ']').forEach(a => a.href = s[k].trim());
+    });
   }catch(e){ console.warn(e); }
 }
 
@@ -1456,7 +1446,6 @@ window.addEventListener('keydown', e => {
 
 /* ═══════════ 문의 ═══════════ */
 $('#mailBtn').addEventListener('click', () => openM('mailModal'));
-$('#floatMail').addEventListener('click', () => openM('mailModal'));
 $('#inqSubmit').addEventListener('click', async () => {
   const name = $('#inqName').value.trim();
   const contact = $('#inqContact').value.trim();
