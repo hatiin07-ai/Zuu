@@ -261,6 +261,9 @@ footer{text-align:center;margin-top:34px;font-size:.75rem;color:var(--muted);fon
   background:rgba(255,255,255,.55);border:1px solid var(--glass-line);transition:all .2s}
 .ftab:hover{color:var(--pink-deep)}
 .ftab.active{background:var(--pink);color:#fff;border-color:var(--pink)}
+#seasonTabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+#seasonTabs::-webkit-scrollbar{display:none}
+#seasonTabs .ftab{flex:none}
 .pagination{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:18px;flex-wrap:wrap}
 .page-btn{min-width:36px;height:36px;padding:0 8px;border-radius:12px;border:1px solid var(--glass-line);
   background:rgba(255,255,255,.6);color:var(--ink);font-size:.82rem;font-weight:700;transition:all .15s;
@@ -273,14 +276,16 @@ footer{text-align:center;margin-top:34px;font-size:.75rem;color:var(--muted);fon
 
 /* ── 노래책 패널 ── */
 .song-box{padding:6px 6px 10px;overflow-x:auto}
-.song-table{width:100%;border-collapse:collapse;min-width:640px}
+.song-table{width:100%;border-collapse:collapse;table-layout:fixed}
+.song-table col.c-artist{width:165px} .song-table col.c-title{width:280px} .song-table col.c-genre{width:80px}
+.song-table col.c-level{width:100px} .song-table col.c-memo{width:175px} .song-table col.c-copy{width:84px}
 .song-table th{font-size:.72rem;font-weight:800;color:var(--muted);text-align:left;padding:12px 14px;border-bottom:1.5px solid var(--glass-line);white-space:nowrap}
 .song-table td{font-size:.82rem;font-weight:600;padding:11px 14px;border-bottom:1px solid rgba(247,211,227,.5);vertical-align:middle}
 .song-table tr:last-child td{border-bottom:none}
 .song-table tr:hover td{background:rgba(253,238,245,.6)}
-.st-artist{color:var(--pink-deep);font-weight:700;white-space:nowrap}
-.st-title{min-width:180px}
-.st-memo{color:var(--muted);font-weight:500;font-size:.76rem;max-width:220px}
+.st-artist,.st-title,.st-memo{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st-artist{color:var(--pink-deep);font-weight:700}
+.st-memo{color:var(--muted);font-weight:500;font-size:.76rem}
 .genre-badge{font-size:.66rem;font-weight:800;border-radius:99px;padding:3px 10px;white-space:nowrap}
 .gb-kpop{background:#ffe0ec;color:#e75d97}
 .gb-jpop{background:#e6ddf7;color:#8a6fd1}
@@ -608,6 +613,7 @@ friends +</div>
     </div>
     <div class="card glass song-box">
       <table class="song-table">
+        <colgroup><col class="c-artist"><col class="c-title"><col class="c-genre"><col class="c-level"><col class="c-memo"><col class="c-copy"></colgroup>
         <thead><tr><th>가수</th><th>제목</th><th style="text-align:center">장르</th><th style="text-align:center">숙련도</th><th>메모</th><th></th></tr></thead>
         <tbody id="songTbody"></tbody>
       </table>
@@ -623,6 +629,7 @@ friends +</div>
       <h2>🏆 <span data-pf="p_name">쮸</span>의 <b>업보</b><span class="cnt-badge" id="upboCount">0명</span></h2>
       <span class="upd-label" id="upboUpdated"></span>
     </div>
+    <div class="ftabs" id="seasonTabs" style="display:none;margin-bottom:12px"></div>
     <div class="tool-row">
       <input class="search-input" id="upboSearch" placeholder="🔍 닉네임 · 아이디 검색" autocomplete="off">
     </div>
@@ -994,11 +1001,11 @@ function renderSongs(){
   if (songPage > totalPages) songPage = 1;
   const paged = filtered.slice((songPage-1)*SONG_PAGE, songPage*SONG_PAGE);
   tbody.innerHTML = paged.map((s, i) => {
-    return '<tr><td class="st-artist">' + esc(s.artist) + '</td>' +
-      '<td class="st-title">' + esc(s.title) + '</td>' +
+    return '<tr><td class="st-artist" title="' + esc(s.artist) + '">' + esc(s.artist) + '</td>' +
+      '<td class="st-title" title="' + esc(s.title) + '">' + esc(s.title) + '</td>' +
       '<td style="text-align:center"><span class="genre-badge ' + genreClass(s.genre) + '">' + (GENRE_LABELS[s.genre] || esc(s.genre) || '기타') + '</span></td>' +
       '<td style="text-align:center">' + starsHTML(s.level) + '</td>' +
-      '<td class="st-memo">' + esc(s.memo || '') + '</td>' +
+      '<td class="st-memo" title="' + esc(s.memo || '') + '">' + esc(s.memo || '') + '</td>' +
       '<td style="text-align:center"><button class="copy-btn" data-copy="' + esc((s.artist||'') + ' - ' + (s.title||'')) + '">복사</button></td></tr>';
   }).join('');
   renderPager('songPager', totalPages, songPage, goSongPage);
@@ -1069,9 +1076,27 @@ async function loadUpbo(){
   }catch(e){ seasons = []; }
   const active = seasons.find(s => s.is_active) || seasons[0];
   curSeason = active ? active.id : null;
+  renderSeasonTabs();
   await loadSeasonTasks();
   hydrateNicks();
 }
+/* 시즌 탭 — 시즌이 2개 이상일 때만 노출 */
+function renderSeasonTabs(){
+  const wrap = $('#seasonTabs');
+  if (seasons.length < 2){ wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
+  wrap.style.display = 'flex';
+  wrap.innerHTML = seasons.map(s =>
+    '<button class="ftab' + (String(s.id) === String(curSeason) ? ' active' : '') + '" data-sid="' + esc(s.id) + '">' +
+    esc(s.name) + '</button>').join('');
+}
+$('#seasonTabs').addEventListener('click', async e => {
+  const b = e.target.closest('.ftab'); if (!b || String(b.dataset.sid) === String(curSeason)) return;
+  curSeason = b.dataset.sid;
+  upboPage = 1;
+  renderSeasonTabs();
+  await loadSeasonTasks();
+  hydrateNicks();
+});
 async function loadSeasonTasks(){
   memberTasks = {};
   if (sb){
