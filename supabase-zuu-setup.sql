@@ -1,7 +1,7 @@
 -- ═══════════════════════════════════════════════════════
---  쮸(Zuu) 프로필 — 전용 Supabase 세팅 v2 (멱등 · 전체 RUN)
+--  쮸(Zuu) 프로필 — 전용 Supabase 세팅 v3 (멱등 · 전체 RUN)
 --  프로젝트: ebenkpehcdlifzysvcad
---  v2: songs · upbo · gallery · site_settings · Storage 추가
+--  v3: songs · upbo(+시즌) · gallery · site_settings · Storage
 -- ═══════════════════════════════════════════════════════
 
 -- ── 1) 일정 (schedules) ──────────────────────────────
@@ -103,17 +103,34 @@ CREATE TABLE IF NOT EXISTS public.upbo_members (
   coins int DEFAULT 0,
   created_at timestamptz DEFAULT now()
 );
+CREATE TABLE IF NOT EXISTS public.upbo_seasons (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  sort_order int DEFAULT 0,
+  is_active boolean DEFAULT false,
+  created_at timestamptz DEFAULT now()
+);
 CREATE TABLE IF NOT EXISTS public.upbo_tasks (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   member_id uuid REFERENCES public.upbo_members(id) ON DELETE CASCADE,
   type_id uuid REFERENCES public.upbo_task_types(id) ON DELETE CASCADE,
+  season_id uuid REFERENCES public.upbo_seasons(id) ON DELETE CASCADE,
   quantity int DEFAULT 1,
   memo text,
   is_prepared boolean DEFAULT false,
   created_at timestamptz DEFAULT now()
 );
+ALTER TABLE public.upbo_tasks ADD COLUMN IF NOT EXISTS season_id uuid REFERENCES public.upbo_seasons(id) ON DELETE CASCADE;
+-- 같은 항목을 시즌별로 따로 보유할 수 있도록 시즌 포함 유니크
+CREATE UNIQUE INDEX IF NOT EXISTS uq_upbo_task ON public.upbo_tasks(member_id, type_id, COALESCE(season_id, '00000000-0000-0000-0000-000000000000'::uuid));
 CREATE TABLE IF NOT EXISTS public.upbo_settings ( key text PRIMARY KEY, value text );
 
+ALTER TABLE public.upbo_seasons ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "public read seasons" ON public.upbo_seasons;
+DROP POLICY IF EXISTS "auth all seasons" ON public.upbo_seasons;
+CREATE POLICY "public read seasons" ON public.upbo_seasons FOR SELECT USING (true);
+CREATE POLICY "auth all seasons" ON public.upbo_seasons
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
 ALTER TABLE public.upbo_task_types ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.upbo_members ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.upbo_tasks ENABLE ROW LEVEL SECURITY;

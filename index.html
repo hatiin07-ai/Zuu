@@ -4,6 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=940">
 <title>쮸 · Zuu 💗 프로필</title>
+<!-- ── 링크 공유 썸네일 (Open Graph / 트위터 카드) ── -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="쮸 · Zuu">
+<meta property="og:title" content="쮸 · Zuu 💗 프로필">
+<meta property="og:description" content="노래하는 걸 제일 좋아하는 버튜버, 쮸에요. 일정 · 노래책 · 업보를 한곳에서!">
+<!-- 썸네일 교체 시: assets/og.png (권장 1200x630) 업로드 후 아래 3줄의 URL만 바꾸면 됨 -->
+<meta property="og:image" content="https://profile.img.sooplive.com/LOGO/zu/zuu1028/zuu1028.jpg">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="쮸 · Zuu 💗 프로필">
+<meta name="twitter:description" content="노래하는 걸 제일 좋아하는 버튜버, 쮸에요.">
+<meta name="twitter:image" content="https://profile.img.sooplive.com/LOGO/zu/zuu1028/zuu1028.jpg">
+<meta name="description" content="쮸(Zuu) 프로필 · 일정 · 노래책 · 업보">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
@@ -22,6 +35,7 @@
   --muted:#ad99a4;
   --shadow:0 10px 28px rgba(240,130,175,.13);
   --radius:22px;
+  --panel-min:1174px;   /* 전 탭 공통 — 940×1350 컨텐츠 박스 기준 */
   --glass:rgba(255,255,255,.66);
   --glass-line:rgba(247,211,227,.85);
 }
@@ -62,14 +76,11 @@ body.pf #avatarBg img{max-width:700px}
 /* ── 상단 네브바 ── */
 .topbar{
   position:sticky;top:12px;z-index:60;
-  display:flex;align-items:center;gap:12px;
+  display:flex;align-items:center;gap:12px;padding-left:8px;
   background:rgba(255,255,255,.92);backdrop-filter:blur(10px);
   border:1px solid var(--line);border-radius:999px;
   padding:9px 12px;box-shadow:var(--shadow);
 }
-.logo-dots{width:34px;height:34px;border-radius:12px;background:var(--pink-pale);
-  display:grid;place-items:center;grid-template-columns:repeat(2,7px);grid-template-rows:repeat(2,7px);gap:4px;padding:0;flex:none}
-.logo-dots i{width:7px;height:7px;border-radius:2.5px;background:var(--pink)}
 nav.tabs{display:flex;gap:4px;align-items:center;overflow-x:auto;scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
 nav.tabs button{
@@ -137,7 +148,8 @@ nav.tabs button.active{background:var(--pink-soft);color:var(--pink-deep)}
 .mini-ev small{display:block;color:var(--muted);font-weight:500;font-size:.7rem;margin-top:1px}
 
 /* VOD 카드 */
-.vod-card{padding:16px;display:flex;flex-direction:column;gap:12px}
+.vod-row{display:flex;gap:16px;align-items:center}
+.vod-card{padding:16px;display:flex;flex-direction:column;gap:12px;flex:0 0 238px;min-width:0}
 .vod-thumb{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:16/9;background:linear-gradient(135deg,#fde3ee,#e8ddf8);cursor:pointer}
 .vod-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .vod-thumb .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:34px;color:#fff;
@@ -168,17 +180,21 @@ nav.tabs button.active{background:var(--pink-soft);color:var(--pink-deep)}
 .name-title .en{font-size:1rem;color:var(--muted);font-weight:700;letter-spacing:1px}
 .name-desc{margin-top:8px;font-size:.85rem;color:var(--ink);font-weight:500}
 .name-desc::before{content:'♡ ';color:var(--pink)}
-.name-actions{margin-top:14px;display:flex;align-items:center;gap:12px}
+.name-actions{margin-top:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn-yt{background:#fff;border:1.5px solid var(--line);color:var(--pink-deep);font-size:.78rem;font-weight:700;
+  border-radius:99px;padding:8px 16px;transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.btn-yt:hover{border-color:var(--pink);background:var(--pink-pale)}
 .btn-pink{background:var(--pink);color:#fff;font-size:.78rem;font-weight:700;border-radius:99px;padding:9px 18px;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
 .btn-pink:hover{background:var(--pink-deep);transform:translateY(-1px)}
 .dots-deco{margin-left:auto;color:var(--muted);letter-spacing:2px;font-weight:800}
 
 /* ── 히어로 우측: 배너 데코 (아바타는 #avatarBg 고정 레이어) ── */
 .hero-right{position:relative;min-height:620px}
-.deco-copy{position:absolute;left:-16px;top:96px;z-index:3;pointer-events:none}
-.deco-copy .l1{font-size:2.6rem;font-weight:800;color:var(--pink);line-height:1.12;font-style:italic;white-space:pre-line}
-.deco-copy .pill{display:inline-flex;margin-top:12px;background:var(--pink);color:#fff;font-size:1.15rem;font-weight:800;
-  border-radius:99px;padding:8px 22px;box-shadow:0 8px 20px rgba(242,123,169,.35);pointer-events:auto}
+.deco-copy{flex:1;min-width:0;z-index:3;pointer-events:none;padding-left:2px}
+.deco-copy .l1{font-size:2.05rem;font-weight:800;color:var(--pink);line-height:1.14;font-style:italic;white-space:pre-line;
+  text-shadow:0 2px 12px rgba(251,236,243,.9)}
+.deco-copy .pill{display:inline-flex;margin-top:11px;background:var(--pink);color:#fff;font-size:1.02rem;font-weight:800;
+  border-radius:99px;padding:7px 19px;box-shadow:0 8px 20px rgba(242,123,169,.35);pointer-events:auto}
 .avatar-hint{display:none;position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:min(78%,360px);
   border:2.5px dashed var(--pink-soft);border-radius:26px;padding:34px 22px;
   flex-direction:column;align-items:center;gap:12px;color:var(--muted);background:rgba(255,255,255,.5);text-align:center}
@@ -219,6 +235,7 @@ nav.tabs button.active{background:var(--pink-soft);color:var(--pink-deep)}
 footer{text-align:center;margin-top:34px;font-size:.75rem;color:var(--muted);font-weight:600}
 
 /* ── 패널 (SPA) ── */
+.panel{min-height:var(--panel-min);display:flow-root}   /* 전 탭 높이·푸터 위치 통일 */
 .panel[hidden]{display:none}
 
 /* ── 공통: 패널 헤더 · 검색 · 페이지네이션 ── */
@@ -423,7 +440,6 @@ footer{text-align:center;margin-top:34px;font-size:.75rem;color:var(--muted);fon
 
   <!-- ═══ 상단 네브바 ═══ -->
   <header class="topbar">
-    <div class="logo-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <nav class="tabs" id="mainTabs">
       <button data-tab="profile" class="active">프로필</button>
       <button data-tab="song">노래책</button>
@@ -475,7 +491,8 @@ footer{text-align:center;margin-top:34px;font-size:.75rem;color:var(--muted);fon
           </div>
         </div>
 
-        <!-- VOD 플레이어 -->
+        <!-- VOD 플레이어 + 배너 데코 -->
+        <div class="vod-row">
         <div class="card vod-card">
           <div class="vod-thumb" id="vodThumb" title="VOD 재생">
             <div class="ph">▶</div>
@@ -496,6 +513,12 @@ footer{text-align:center;margin-top:34px;font-size:.75rem;color:var(--muted);fon
           </div>
           <div class="vod-line"><i></i></div>
         </div>
+          <div class="deco-copy">
+            <div class="l1" data-pf="p_deco_main">let's be
+friends +</div>
+            <span class="pill" data-pf="p_deco_pill">쮸에요 ♡</span>
+          </div>
+        </div>
 
         <!-- 이름 카드 -->
         <div class="card name-card">
@@ -505,6 +528,7 @@ footer{text-align:center;margin-top:34px;font-size:.75rem;color:var(--muted);fon
           <p class="name-desc" data-pf="p_desc">노래하는 걸 제일 좋아하는 버튜버, 쮸에요.</p>
           <div class="name-actions">
             <a class="btn-pink" data-station href="https://www.sooplive.com/station/zuu1028" target="_blank" rel="noopener">🎬 방송국 바로가기</a>
+            <a class="btn-yt" id="ytBtn" data-yt href="https://www.youtube.com/@zuu_1028" target="_blank" rel="noopener">▶ 다시보기</a>
             <span class="dots-deco">···</span>
           </div>
         </div>
@@ -512,11 +536,6 @@ footer{text-align:center;margin-top:34px;font-size:.75rem;color:var(--muted);fon
 
       <!-- 우측: 배너 데코 (아바타는 뒤 고정 레이어) -->
       <div class="hero-right">
-        <div class="deco-copy">
-          <div class="l1" data-pf="p_deco_main">let's be
-friends +</div>
-          <span class="pill" data-pf="p_deco_pill">쮸에요 ♡</span>
-        </div>
         <div class="avatar-hint" id="avatarHint">
           <div class="big">🎀</div>
           <p>메인 아바타 이미지 자리<br><code>assets/avatar.webp</code> 또는 <code>assets/avatar.png</code><br>업로드하면 전체 배경에 표시돼요</p>
@@ -771,6 +790,9 @@ async function loadProfileSettings(){
     if (s.p_station_url && s.p_station_url.trim()){
       document.querySelectorAll('[data-station]').forEach(a => a.href = s.p_station_url.trim());
     }
+    if (s.p_youtube_url && s.p_youtube_url.trim()){
+      document.querySelectorAll('[data-yt]').forEach(a => a.href = s.p_youtube_url.trim());
+    }
   }catch(e){ console.warn(e); }
 }
 
@@ -1019,27 +1041,53 @@ function memberSort(a, b){
   if (ra !== rb) return ra - rb;
   return dispNick(a).localeCompare(dispNick(b), 'ko');
 }
+let seasons = [], curSeason = null, upboMembersRaw = [];
 async function loadUpbo(){
+  if (!sb){ renderUpbo(allMembers); return; }
+  try{
+    const [{ data: st }, { data: members }] = await Promise.all([
+      sb.from('upbo_settings').select('*').eq('key','last_updated').maybeSingle(),
+      sb.from('upbo_members').select('*').order('sort_order').order('nickname')
+    ]);
+    if (st && st.value) $('#upboUpdated').textContent = '갱신일: ' + st.value;
+    upboMembersRaw = members || [];
+  }catch(e){ console.warn(e); }
+  try{
+    const { data, error } = await sb.from('upbo_seasons').select('*').order('sort_order').order('created_at');
+    if (!error) seasons = data || [];
+  }catch(e){ seasons = []; }
+  const active = seasons.find(s => s.is_active) || seasons[0];
+  curSeason = active ? active.id : null;
+  await loadSeasonTasks();
+  hydrateNicks();
+}
+async function loadSeasonTasks(){
+  memberTasks = {};
   if (sb){
     try{
-      const [{ data: st }, { data: members }, { data: tasks }] = await Promise.all([
-        sb.from('upbo_settings').select('*').eq('key','last_updated').maybeSingle(),
-        sb.from('upbo_members').select('*').order('sort_order').order('nickname'),
-        sb.from('upbo_tasks').select('*, upbo_task_types(id,name,category,sort_order)').gt('quantity', 0)
-      ]);
-      if (st && st.value) $('#upboUpdated').textContent = '갱신일: ' + st.value;
-      memberTasks = {};
-      (tasks||[]).forEach(t => { (memberTasks[t.member_id] = memberTasks[t.member_id] || []).push(t); });
-      allMembers = (members||[]).filter(m => ((memberTasks[m.id] && memberTasks[m.id].length) || m.coins > 0) && !m.is_hidden).sort(memberSort);
+      let q = sb.from('upbo_tasks').select('*, upbo_task_types(id,name,category,sort_order)').gt('quantity', 0);
+      q = curSeason ? q.eq('season_id', curSeason) : q.is('season_id', null);
+      const { data, error } = await q;
+      if (error) throw error;
+      (data||[]).forEach(t => { (memberTasks[t.member_id] = memberTasks[t.member_id] || []).push(t); });
     }catch(e){ console.warn(e); }
   }
-  renderUpbo(allMembers);
-  hydrateNicks();
+  allMembers = upboMembersRaw.filter(m => ((memberTasks[m.id] && memberTasks[m.id].length) || m.coins > 0) && !m.is_hidden).sort(memberSort);
+  renderUpbo(upboFiltered());
 }
 function upboFiltered(){
   const q = $('#upboSearch').value.toLowerCase().trim();
   if (!q) return allMembers;
   return allMembers.filter(m => dispNick(m).toLowerCase().includes(q) || (m.user_id||'').toLowerCase().includes(q));
+}
+function sortTasks(tasks){
+  return tasks.slice().sort((a, b) => {
+    const ta = a.upbo_task_types || {}, tb = b.upbo_task_types || {};
+    if (ta.category !== tb.category) return ta.category === 'event' ? 1 : -1;
+    const oa = ta.sort_order || 0, ob = tb.sort_order || 0;
+    if (oa !== ob) return oa - ob;
+    return String(ta.name||'').localeCompare(String(tb.name||''), 'ko');
+  });
 }
 function renderUpbo(list){
   upboList = list;
@@ -1085,12 +1133,7 @@ async function hydrateNicks(){
 function openMemberModal(mid){
   const m = allMembers.find(x => String(x.id) === String(mid));
   if (!m) return;
-  const tasks = (memberTasks[mid] || []).slice().sort((a, b) => {
-    const na = (a.upbo_task_types && a.upbo_task_types.name) || '', nb = (b.upbo_task_types && b.upbo_task_types.name) || '';
-    const ra = nickRank(na), rb = nickRank(nb);
-    if (ra !== rb) return ra - rb;
-    return na.localeCompare(nb, 'ko');
-  });
+  const tasks = sortTasks(memberTasks[mid] || []);
   const url = avatarUrl(m.user_id);
   $('#mmAvatar').innerHTML = url ? '<img src="' + url + '" alt="" onerror="this.parentElement.innerHTML=\'🐰\'">' : '🐰';
   $('#mmNick').textContent = dispNick(m);
@@ -1105,6 +1148,7 @@ function openMemberModal(mid){
       (t.memo ? '<div class="task-memo-txt">' + esc(t.memo) + '</div>' : '') + '</div>' +
       '<span class="task-qty">×' + (t.quantity || 1) + '</span></div>';
   }).join('') || '<div class="state-empty" style="padding:16px 0">보유 업보가 없어요 🪙</div>';
+  
   openM('memberModal');
 }
 
