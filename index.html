@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=940">
+<title>쮸 · Zuu 💗 프로필</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --bg:#fbecf3;
+  --card:#ffffff;
+  --line:#f7d3e3;
+  --pink:#f27ba9;
+  --pink-deep:#e75d97;
+  --pink-soft:#fcd9e8;
+  --pink-pale:#fdeef5;
+  --lav:#cfc0f0;
+  --mint:#bfe6e0;
+  --ink:#4d4148;
+  --muted:#ad99a4;
+  --shadow:0 10px 28px rgba(240,130,175,.13);
+  --radius:22px;
+  --glass:rgba(255,255,255,.66);
+  --glass-line:rgba(247,211,227,.85);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Poppins','Pretendard',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+:focus-visible{outline:2px solid var(--pink-deep);outline-offset:2px;border-radius:8px}
+
+/* ── 배경 데코 ── */
+.bg-deco{position:fixed;inset:0;pointer-events:none;z-index:0}
+.bg-deco .plus{position:absolute;color:var(--pink);font-weight:700;opacity:.5;font-size:22px}
+.bg-deco .plus.b{font-size:34px;opacity:.35}
+.bg-deco .dots{position:absolute;width:90px;height:60px;opacity:.5;
+  background-image:radial-gradient(var(--pink-soft) 2px,transparent 2.5px);background-size:14px 14px}
+
+/* ── 전면 아바타 배경 레이어 (모든 탭 공통 · 콘텐츠 뒤) ── */
+#avatarBg{position:fixed;bottom:0;left:calc(50% + 116px);transform:translateX(-50%);z-index:1;
+  pointer-events:none;height:min(94vh,940px);display:flex;align-items:flex-end;justify-content:center}
+#avatarBg img{height:100%;width:auto;max-width:470px;object-fit:contain;object-position:bottom center;
+  filter:drop-shadow(0 24px 44px rgba(231,93,151,.22))}
+#avatarBg.off{display:none}
+/* 프로필 탭: 스크롤 따라오지 않고 페이지에 고정 — 네브바 아래 ~ 푸터까지 */
+body{position:relative}
+body.pf #avatarBg{position:absolute;top:84px;bottom:8px;height:auto}
+body.pf #avatarBg img{max-width:700px}
+
+.wrap{position:relative;z-index:2;max-width:940px;margin:0 auto;padding:16px 22px 46px}
+
+/* ── 상단 네브바 ── */
+.topbar{
+  position:sticky;top:12px;z-index:60;
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:999px;
+  padding:9px 12px;box-shadow:var(--shadow);
+}
+.logo-dots{width:34px;height:34px;border-radius:12px;background:var(--pink-pale);
+  display:grid;place-items:center;grid-template-columns:repeat(2,7px);grid-template-rows:repeat(2,7px);gap:4px;padding:0;flex:none}
+.logo-dots i{width:7px;height:7px;border-radius:2.5px;background:var(--pink)}
+nav.tabs{display:flex;gap:4px;align-items:center;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{
+  padding:9px 18px;border-radius:999px;font-size:.9rem;font-weight:600;color:var(--muted);
+  transition:all .22s;white-space:nowrap;
+}
+nav.tabs button:hover{color:var(--pink-deep)}
+nav.tabs button.active{background:var(--pink-soft);color:var(--pink-deep)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex:none}
+.station-link{position:relative;display:block;width:42px;height:42px}
+.station-link img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--pink-soft);display:block;transition:transform .2s}
+.station-link:hover img{transform:scale(1.06)}
+.station-fallback{display:none;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--pink-soft),var(--lav));
+  align-items:center;justify-content:center;font-size:18px;border:2px solid var(--pink-soft)}
+.live-dot{position:absolute;bottom:-1px;right:-1px;width:13px;height:13px;border-radius:50%;
+  background:#c9c2c6;border:2.5px solid #fff}
+.live-dot.on{background:#ff4d6d;animation:livePulse 1.4s ease-in-out infinite}
+@keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,77,109,.5)}50%{box-shadow:0 0 0 5px rgba(255,77,109,0)}}
+.live-tag{display:none;font-size:.58rem;font-weight:800;color:#fff;background:#ff4d6d;border-radius:6px;
+  padding:2px 6px;position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);letter-spacing:.4px}
+.live-tag.show{display:block}
+.icon-btn{width:42px;height:42px;border-radius:50%;background:var(--pink-pale);display:flex;align-items:center;justify-content:center;
+  color:var(--pink-deep);transition:all .2s;flex:none}
+.icon-btn:hover{background:var(--pink-soft);transform:translateY(-1px)}
+.icon-btn svg{width:19px;height:19px}
+
+/* ── 카드 공통 ── */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.glass{background:var(--glass) !important;backdrop-filter:blur(8px);border:1px solid var(--glass-line)}
+
+/* ── 히어로 그리드 ── */
+.hero{display:grid;grid-template-columns:minmax(0,472px) minmax(0,1fr);gap:10px;margin-top:26px;position:relative}
+.hero-left{display:flex;flex-direction:column;gap:16px;position:relative;z-index:2}
+.row1{display:grid;grid-template-columns:1.3fr .9fr;gap:14px;align-items:stretch}
+
+/* 오늘의 스케줄 카드 */
+.today-card{padding:20px 20px 16px;display:flex;flex-direction:column;gap:10px}
+.t-label{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.5px}
+.t-label b{color:var(--pink-deep)}
+.t-main{display:flex;align-items:flex-end;gap:12px}
+.t-num{font-size:3.4rem;font-weight:800;color:var(--pink);line-height:.9}
+.t-sub{font-size:.85rem;color:var(--muted);font-weight:600;line-height:1.35;padding-bottom:4px}
+.t-evs{display:flex;flex-direction:column;gap:6px;min-height:34px}
+.ev-chip{display:flex;align-items:center;gap:8px;font-size:.8rem;background:var(--pink-pale);
+  border-radius:10px;padding:6px 10px;font-weight:600}
+.ev-chip .dot{width:9px;height:9px;border-radius:50%;flex:none}
+.ev-chip time{font-weight:800;color:var(--pink-deep);font-size:.76rem}
+.ev-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev-none{font-size:.8rem;color:var(--muted);padding:6px 2px}
+.t-foot{display:flex;align-items:center;gap:12px;margin-top:2px}
+.t-bar{flex:1;height:5px;border-radius:99px;background:var(--pink-pale);overflow:hidden}
+.t-bar i{display:block;height:100%;width:38%;border-radius:99px;background:var(--pink)}
+.round-btn{width:34px;height:34px;border-radius:50%;background:var(--pink);color:#fff;font-size:17px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;flex:none}
+.round-btn:hover{background:var(--pink-deep);transform:translateX(2px)}
+
+/* 내일·모레 미니 */
+.mini-col{display:flex;flex-direction:column;gap:14px}
+.mini{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
+  padding:14px 15px;flex:1;display:flex;flex-direction:column;gap:8px;justify-content:center}
+.mini .pill{align-self:flex-start;font-size:.68rem;font-weight:700;color:var(--pink-deep);
+  background:var(--pink-soft);border-radius:99px;padding:4px 11px}
+.mini.lav .pill{background:#e6ddf7;color:#8a6fd1}
+.mini-ev{font-size:.78rem;font-weight:600;color:var(--ink);line-height:1.4;word-break:keep-all}
+.mini-ev small{display:block;color:var(--muted);font-weight:500;font-size:.7rem;margin-top:1px}
+
+/* VOD 카드 */
+.vod-card{padding:16px;display:flex;flex-direction:column;gap:12px}
+.vod-thumb{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:16/9;background:linear-gradient(135deg,#fde3ee,#e8ddf8);cursor:pointer}
+.vod-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vod-thumb .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:34px;color:#fff;
+  text-shadow:0 2px 10px rgba(231,93,151,.4)}
+.vod-thumb .hover-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(231,93,151,.16);
+  opacity:0;transition:opacity .2s}
+.vod-thumb:hover .hover-play{opacity:1}
+.vod-thumb .hover-play i{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;
+  color:var(--pink-deep);font-style:normal;font-size:17px;padding-left:3px}
+.vod-meta{display:flex;align-items:center;gap:10px}
+.vod-meta .txt{flex:1;min-width:0}
+.vod-title{font-size:.92rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vod-by{font-size:.72rem;color:var(--muted);font-weight:500}
+.vod-idx{font-size:.7rem;font-weight:700;color:var(--pink-deep);background:var(--pink-pale);border-radius:99px;padding:3px 10px;flex:none}
+.vod-controls{display:flex;align-items:center;justify-content:center;gap:22px}
+.vc-btn{color:var(--pink-deep);font-size:15px;transition:transform .15s;display:flex}
+.vc-btn:hover{transform:scale(1.15)}
+.vc-play{width:46px;height:46px;border-radius:50%;background:var(--pink);color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:16px;padding-left:2px;box-shadow:0 6px 16px rgba(242,123,169,.4);transition:all .2s}
+.vc-play:hover{background:var(--pink-deep);transform:scale(1.06)}
+.vod-line{height:4px;border-radius:99px;background:var(--pink-pale);overflow:hidden}
+.vod-line i{display:block;height:100%;width:26%;background:var(--pink);border-radius:99px}
+
+/* 이름 카드 */
+.name-card{padding:22px 24px;position:relative}
+.name-title{font-size:1.75rem;font-weight:800;color:var(--pink-deep);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.name-title .star{color:var(--pink-soft);font-size:1.1rem}
+.name-title .en{font-size:1rem;color:var(--muted);font-weight:700;letter-spacing:1px}
+.name-desc{margin-top:8px;font-size:.85rem;color:var(--ink);font-weight:500}
+.name-desc::before{content:'♡ ';color:var(--pink)}
+.name-actions{margin-top:14px;display:flex;align-items:center;gap:12px}
+.btn-pink{background:var(--pink);color:#fff;font-size:.78rem;font-weight:700;border-radius:99px;padding:9px 18px;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-pink:hover{background:var(--pink-deep);transform:translateY(-1px)}
+.dots-deco{margin-left:auto;color:var(--muted);letter-spacing:2px;font-weight:800}
+
+/* ── 히어로 우측: 배너 데코 (아바타는 #avatarBg 고정 레이어) ── */
+.hero-right{position:relative;min-height:620px}
+.deco-copy{position:absolute;left:-16px;top:96px;z-index:3;pointer-events:none}
+.deco-copy .l1{font-size:2.6rem;font-weight:800;color:var(--pink);line-height:1.12;font-style:italic;white-space:pre-line}
+.deco-copy .pill{display:inline-flex;margin-top:12px;background:var(--pink);color:#fff;font-size:1.15rem;font-weight:800;
+  border-radius:99px;padding:8px 22px;box-shadow:0 8px 20px rgba(242,123,169,.35);pointer-events:auto}
+.avatar-hint{display:none;position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:min(78%,360px);
+  border:2.5px dashed var(--pink-soft);border-radius:26px;padding:34px 22px;
+  flex-direction:column;align-items:center;gap:12px;color:var(--muted);background:rgba(255,255,255,.5);text-align:center}
+.avatar-hint .big{font-size:48px}
+.avatar-hint p{font-size:.78rem;font-weight:600;line-height:1.6}
+.avatar-hint code{background:var(--pink-pale);border-radius:6px;padding:2px 7px;color:var(--pink-deep);font-size:.72rem}
+.side-tab{position:absolute;right:-10px;top:44px;z-index:4;background:#fff;border:1px solid var(--line);border-radius:16px;
+  padding:16px 9px;writing-mode:vertical-rl;font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:1.5px;box-shadow:var(--shadow)}
+.side-tab b{color:var(--pink-deep)}
+.float-btns{position:absolute;right:-4px;top:300px;z-index:4;display:flex;flex-direction:column;gap:12px}
+.fb{width:46px;height:46px;border-radius:16px;background:var(--pink);color:#fff;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 18px rgba(242,123,169,.35);transition:all .2s}
+.fb:hover{background:var(--pink-deep);transform:translateY(-2px)}
+.fb svg{width:20px;height:20px}
+
+/* ── 하단 어바웃미 · 갤러리 (2/3) ── */
+.bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:20px;align-items:stretch}
+.info-card{padding:20px 22px}
+.info-card h3{font-size:1rem;font-weight:800;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.info-card h3 .see{font-size:.72rem;color:var(--pink-deep);font-weight:700;cursor:pointer;display:flex;align-items:center;gap:3px}
+.info-card h3 .see:hover{text-decoration:underline}
+.about-desc{font-size:.82rem;color:var(--ink);font-weight:500;line-height:1.65;word-break:keep-all;white-space:pre-line}
+.about-rows{margin-top:10px;display:flex;flex-direction:column;gap:5px;font-size:.76rem;color:var(--muted);font-weight:600}
+.about-rows b{color:var(--pink-deep);font-weight:700;margin-right:4px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.chip{font-size:.7rem;font-weight:700;color:var(--pink-deep);background:var(--pink-pale);border:1px solid var(--pink-soft);
+  border-radius:99px;padding:5px 12px}
+.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.gal-thumb{aspect-ratio:3/4;border-radius:14px;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s;
+  display:flex;align-items:center;justify-content:center;font-size:22px}
+.gal-thumb:hover{transform:translateY(-3px)}
+.gal-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.g1{background:linear-gradient(160deg,#ffd9ea,#f8c1dc)}
+.g2{background:linear-gradient(160deg,#e3d9fa,#cdbdf2)}
+.g3{background:linear-gradient(160deg,#d2ecf8,#bcdcf5)}
+.ghost{visibility:hidden}
+
+footer{text-align:center;margin-top:34px;font-size:.75rem;color:var(--muted);font-weight:600}
+
+/* ── 패널 (SPA) ── */
+.panel[hidden]{display:none}
+
+/* ── 공통: 패널 헤더 · 검색 · 페이지네이션 ── */
+.sched-head{display:flex;align-items:center;gap:14px;margin:26px 0 14px;flex-wrap:wrap}
+.sched-head h2{font-size:1.25rem;font-weight:800}
+.sched-head h2 b{color:var(--pink-deep)}
+.cnt-badge{font-size:.72rem;font-weight:800;color:var(--pink-deep);background:rgba(252,217,232,.85);border-radius:99px;padding:4px 12px;vertical-align:3px;margin-left:4px}
+.upd-label{font-size:.72rem;color:var(--muted);font-weight:600;margin-left:auto}
+.search-input{width:min(340px,100%);border:1.5px solid var(--glass-line);border-radius:999px;padding:11px 18px;font-size:.85rem;
+  font-family:inherit;color:var(--ink);background:var(--glass);backdrop-filter:blur(6px);transition:border .2s}
+.search-input:focus{outline:none;border-color:var(--pink);background:rgba(255,255,255,.9)}
+.tool-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.ftabs{display:flex;gap:6px;flex-wrap:wrap}
+.ftab{padding:8px 15px;border-radius:999px;font-size:.78rem;font-weight:700;color:var(--muted);
+  background:rgba(255,255,255,.55);border:1px solid var(--glass-line);transition:all .2s}
+.ftab:hover{color:var(--pink-deep)}
+.ftab.active{background:var(--pink);color:#fff;border-color:var(--pink)}
+.pagination{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:18px;flex-wrap:wrap}
+.page-btn{min-width:36px;height:36px;padding:0 8px;border-radius:12px;border:1px solid var(--glass-line);
+  background:rgba(255,255,255,.6);color:var(--ink);font-size:.82rem;font-weight:700;transition:all .15s;
+  display:flex;align-items:center;justify-content:center}
+.page-btn:hover{transform:translateY(-1px);color:var(--pink-deep)}
+.page-btn.active{background:var(--pink);color:#fff;border-color:var(--pink)}
+.page-btn:disabled{opacity:.35;cursor:default;pointer-events:none}
+.page-dots{padding:0 3px;color:var(--muted);font-weight:700}
+.state-empty{text-align:center;color:var(--muted);font-size:.85rem;padding:40px 0;font-weight:600}
+
+/* ── 노래책 패널 ── */
+.song-box{padding:6px 6px 10px;overflow-x:auto}
+.song-table{width:100%;border-collapse:collapse;min-width:640px}
+.song-table th{font-size:.72rem;font-weight:800;color:var(--muted);text-align:left;padding:12px 14px;border-bottom:1.5px solid var(--glass-line);white-space:nowrap}
+.song-table td{font-size:.82rem;font-weight:600;padding:11px 14px;border-bottom:1px solid rgba(247,211,227,.5);vertical-align:middle}
+.song-table tr:last-child td{border-bottom:none}
+.song-table tr:hover td{background:rgba(253,238,245,.6)}
+.st-artist{color:var(--pink-deep);font-weight:700;white-space:nowrap}
+.st-title{min-width:180px}
+.st-memo{color:var(--muted);font-weight:500;font-size:.76rem;max-width:220px}
+.genre-badge{font-size:.66rem;font-weight:800;border-radius:99px;padding:3px 10px;white-space:nowrap}
+.gb-kpop{background:#ffe0ec;color:#e75d97}
+.gb-jpop{background:#e6ddf7;color:#8a6fd1}
+.gb-pop{background:#d8ecf9;color:#4d94d6}
+.gb-etc{background:#fff0d9;color:#d99a3d}
+.stars{white-space:nowrap;font-size:.78rem;letter-spacing:1px}
+.star-on{color:#f7b32b}
+.star-off{color:#e3d5da}
+.copy-btn{font-size:.7rem;font-weight:800;color:var(--pink-deep);background:var(--pink-pale);border-radius:99px;padding:6px 13px;transition:all .15s;white-space:nowrap}
+.copy-btn:hover{background:var(--pink-soft)}
+.copy-btn.copied{background:var(--pink);color:#fff}
+.rand-body{text-align:center;padding:6px 0 2px}
+.rand-body .g{font-size:.8rem;color:var(--muted);font-weight:700;margin-bottom:6px}
+.rand-body .a{font-size:1rem;color:var(--pink-deep);font-weight:800}
+.rand-body .t{font-size:1.5rem;font-weight:800;margin:4px 0 6px}
+.rand-body .m{font-size:.8rem;color:var(--muted);font-weight:500;margin-bottom:18px;min-height:1em}
+.rand-acts{display:flex;gap:8px;justify-content:center}
+.btn-line{background:#fff;border:1.5px solid var(--line);color:var(--ink);font-size:.78rem;font-weight:700;border-radius:99px;padding:9px 18px;transition:all .2s}
+.btn-line:hover{border-color:var(--pink);color:var(--pink-deep)}
+
+/* ── 업보 패널 ── */
+.member-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.member-card{background:rgba(255,255,255,.72);backdrop-filter:blur(7px);border:1px solid var(--glass-line);border-radius:18px;
+  box-shadow:var(--shadow);padding:17px 12px 14px;text-align:center;cursor:pointer;transition:transform .18s}
+.member-card:hover{transform:translateY(-3px)}
+.member-avatar{width:58px;height:58px;border-radius:50%;margin:0 auto 9px;overflow:hidden;background:linear-gradient(135deg,var(--pink-soft),var(--lav));
+  display:flex;align-items:center;justify-content:center;font-size:24px;border:2.5px solid #fff;box-shadow:0 4px 10px rgba(231,93,151,.18)}
+.member-avatar img{width:100%;height:100%;object-fit:cover}
+.member-nick{font-size:.85rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.member-id{font-size:.66rem;color:var(--muted);font-weight:600;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.count-row{display:flex;justify-content:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+.member-count{font-size:.68rem;font-weight:800;color:var(--pink-deep);background:var(--pink-pale);border-radius:99px;padding:3px 10px}
+.coin-count{font-size:.68rem;font-weight:800;color:#b8860b;background:#fff3d6;border-radius:99px;padding:3px 10px}
+.mm-head{display:flex;align-items:center;gap:13px;margin-bottom:14px}
+.mm-avatar{width:56px;height:56px;border-radius:50%;overflow:hidden;flex:none;background:linear-gradient(135deg,var(--pink-soft),var(--lav));
+  display:flex;align-items:center;justify-content:center;font-size:24px}
+.mm-avatar img{width:100%;height:100%;object-fit:cover}
+.mm-nick{font-size:1.1rem;font-weight:800}
+.mm-uid{font-size:.72rem;color:var(--muted);font-weight:600}
+.task-list{display:flex;flex-direction:column;gap:8px;max-height:52vh;overflow-y:auto}
+.task-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--pink-pale);border-radius:12px;padding:10px 14px}
+.task-row.evt{background:#f0eafc}
+.task-row.prep{opacity:.75}
+.task-name{font-size:.84rem;font-weight:700}
+.task-memo-txt{font-size:.7rem;color:var(--muted);font-weight:500;margin-top:2px}
+.task-qty{font-size:.88rem;font-weight:800;color:var(--pink-deep);flex:none}
+.mini-tag{font-size:.6rem;font-weight:800;border-radius:6px;padding:1.5px 6px;margin-left:5px;vertical-align:1px}
+.mini-tag.evt{background:#cfc0f0;color:#5b4a91}
+.mini-tag.prep{background:#c8ead9;color:#2c7a54}
+
+/* ── 일정 패널 ── */
+.month-nav{display:flex;align-items:center;gap:6px;margin-left:auto}
+.month-nav button{width:32px;height:32px;border-radius:50%;background:rgba(252,217,232,.8);color:var(--pink-deep);font-weight:800;transition:all .2s}
+.month-nav button:hover{background:var(--pink-soft)}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.legend span{display:inline-flex;align-items:center;gap:5px;font-size:.7rem;font-weight:600;color:var(--muted)}
+.legend i{width:10px;height:10px;border-radius:4px;display:inline-block}
+.cal-card{padding:18px}
+.cal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
+.cal-week div{text-align:center;font-size:.7rem;font-weight:700;color:var(--muted);padding:4px 0}
+.cal-week div:first-child{color:var(--pink)}
+.cal-week div:last-child{color:#7fb3e8}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-cell{min-height:84px;background:rgba(253,238,245,.72);border-radius:12px;padding:7px 7px 5px;font-size:.72rem;
+  display:flex;flex-direction:column;gap:3px;min-width:0}
+.cal-cell.blank{background:transparent}
+.cal-cell .d{font-weight:800;color:var(--muted);font-size:.72rem}
+.cal-cell.sun .d{color:var(--pink)}
+.cal-cell.sat .d{color:#7fb3e8}
+.cal-cell.today-cell{outline:2px solid var(--pink);outline-offset:-2px;background:rgba(255,255,255,.9)}
+.cal-cell.today-cell .d{color:var(--pink-deep)}
+.cal-ev{border-radius:7px;padding:2.5px 6px;font-size:.63rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:default}
+.cal-more{font-size:.6rem;font-weight:700;color:var(--pink-deep)}
+.up-list{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.up-row{display:flex;align-items:center;gap:16px;background:var(--glass);backdrop-filter:blur(7px);border:1px solid var(--glass-line);border-radius:18px;
+  box-shadow:var(--shadow);padding:12px 18px}
+.up-date{width:62px;text-align:center;flex:none}
+.up-date .n{font-size:1.55rem;font-weight:800;color:var(--pink);line-height:1}
+.up-date .m{font-size:.62rem;font-weight:700;color:var(--muted);letter-spacing:.5px;margin-top:2px}
+.up-body{flex:1;min-width:0}
+.up-title{font-size:.95rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.up-title time{color:var(--pink-deep);font-weight:800;font-size:.82rem;margin-right:7px}
+.up-memo{font-size:.72rem;color:var(--muted);font-weight:500;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.up-badge{font-size:.66rem;font-weight:800;border-radius:99px;padding:4px 11px;flex:none}
+.up-today{font-size:.6rem;font-weight:800;background:var(--pink);color:#fff;border-radius:99px;padding:3px 9px;flex:none}
+.up-empty{text-align:center;color:var(--muted);font-size:.82rem;padding:26px 0;font-weight:600}
+
+/* ── 모달 공통 ── */
+.modal{position:fixed;inset:0;z-index:120;background:rgba(80,52,68,.45);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;padding:20px}
+.modal-card{background:#fff;border-radius:24px;box-shadow:0 24px 60px rgba(80,40,60,.3);
+  width:min(440px,94vw);max-height:88vh;overflow-y:auto;padding:26px;position:relative;
+  animation:mpop .28s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes mpop{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+.modal-card.wide{width:min(940px,95vw);padding:18px}
+.modal-card.gal-wide{width:min(720px,95vw)}
+.m-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:var(--pink-pale);
+  color:var(--pink-deep);font-size:15px;display:flex;align-items:center;justify-content:center;z-index:2}
+.m-close:hover{background:var(--pink-soft)}
+.m-title{font-size:1.05rem;font-weight:800;margin-bottom:16px;padding-right:36px}
+.vod-frame{aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000}
+.vod-frame iframe{width:100%;height:100%;border:0;display:block}
+.vm-title{font-size:.9rem;font-weight:700;margin-top:12px;padding:0 4px 4px}
+.vm-link{font-size:.72rem;color:var(--pink-deep);font-weight:700;padding:0 4px}
+.vm-link:hover{text-decoration:underline}
+.f-field{margin-bottom:13px}
+.f-field label{display:block;font-size:.74rem;font-weight:700;color:var(--muted);margin-bottom:5px}
+.f-field input,.f-field textarea{width:100%;border:1.5px solid var(--line);border-radius:13px;padding:11px 14px;font-size:.85rem;
+  font-family:inherit;color:var(--ink);background:var(--pink-pale);transition:border .2s;resize:vertical}
+.f-field input:focus,.f-field textarea:focus{outline:none;border-color:var(--pink);background:#fff}
+.f-submit{width:100%;background:var(--pink);color:#fff;font-weight:800;font-size:.9rem;border-radius:14px;padding:13px;transition:all .2s;margin-top:4px}
+.f-submit:hover{background:var(--pink-deep)}
+.f-submit:disabled{opacity:.55;cursor:default}
+.gal-modal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gal-modal-grid .gal-thumb{aspect-ratio:3/4}
+.gal-note{margin-top:14px;font-size:.74rem;color:var(--muted);text-align:center;font-weight:600}
+.day-ev-list{display:flex;flex-direction:column;gap:8px}
+.day-ev{display:flex;align-items:center;gap:10px;background:var(--pink-pale);border-radius:12px;padding:10px 13px;font-size:.83rem;font-weight:600}
+.day-ev .dot{width:10px;height:10px;border-radius:50%;flex:none}
+.day-ev time{font-weight:800;color:var(--pink-deep);font-size:.76rem;flex:none}
+.day-ev .memo{color:var(--muted);font-weight:500;font-size:.74rem}
+
+/* ── 라이트박스 (갤러리 확대) ── */
+#lightbox{position:fixed;inset:0;z-index:300;background:rgba(50,30,42,.78);backdrop-filter:blur(6px);
+  display:none;align-items:center;justify-content:center;padding:26px;cursor:zoom-out}
+#lightbox img{max-width:min(92vw,860px);max-height:82vh;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.45);
+  animation:mpop .25s cubic-bezier(.2,.9,.3,1.2);cursor:default}
+#lightbox .lb-cap{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);max-width:86vw;
+  background:rgba(255,255,255,.94);color:var(--ink);font-size:.82rem;font-weight:700;border-radius:99px;padding:9px 20px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#lightbox .lb-close{position:absolute;top:22px;right:22px;width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.92);color:var(--pink-deep);font-size:17px;display:flex;align-items:center;justify-content:center}
+
+/* ── 토스트 ── */
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(16px);z-index:400;
+  background:var(--ink);color:#fff;font-size:.82rem;font-weight:600;border-radius:99px;padding:11px 22px;
+  opacity:0;pointer-events:none;transition:all .3s}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-deco" aria-hidden="true">
+  <span class="plus b" style="top:120px;left:4%">+</span>
+  <span class="plus" style="top:340px;left:46%">+</span>
+  <span class="plus b" style="top:70px;right:26%">+</span>
+  <span class="plus" style="top:520px;right:6%">+</span>
+  <span class="plus" style="bottom:180px;left:10%">+</span>
+  <div class="dots" style="top:200px;right:3%"></div>
+  <div class="dots" style="bottom:120px;right:30%"></div>
+  <div class="dots" style="top:60px;left:30%"></div>
+</div>
+
+<!-- 전면 아바타 (콘텐츠 뒤 고정 · 모든 탭 공통) -->
+<div id="avatarBg" aria-hidden="true">
+  <img id="mainAvatar" src="assets/avatar.webp" alt=""
+    onerror="if(!this.dataset.p){this.dataset.p=1;this.src='assets/avatar.png'}else{document.getElementById('avatarBg').classList.add('off');var h=document.getElementById('avatarHint');if(h)h.style.display='flex'}">
+</div>
+
+<div class="wrap">
+
+  <!-- ═══ 상단 네브바 ═══ -->
+  <header class="topbar">
+    <div class="logo-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <nav class="tabs" id="mainTabs">
+      <button data-tab="profile" class="active">프로필</button>
+      <button data-tab="song">노래책</button>
+      <button data-tab="upbo">업보</button>
+      <button data-tab="schedule">일정</button>
+    </nav>
+    <div class="topbar-right">
+      <a class="station-link" data-station href="https://www.sooplive.com/station/jjuppi1022" target="_blank" rel="noopener" title="쮸 방송국 바로가기">
+        <img id="stationImg" src="https://profile.img.sooplive.com/LOGO/jj/jjuppi1022/jjuppi1022.jpg" alt="쮸 방송국"
+          onerror="this.style.display='none';document.getElementById('stationFb').style.display='flex'">
+        <span class="station-fallback" id="stationFb">💗</span>
+        <span class="live-dot" id="liveDot"></span>
+        <span class="live-tag" id="liveTag">ON AIR</span>
+      </a>
+      <button class="icon-btn" id="mailBtn" title="문의하기" aria-label="문의하기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="3.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══ 프로필 패널 ═══ -->
+  <section id="panel-profile" class="panel">
+    <div class="hero">
+      <div class="hero-left">
+        <div class="row1">
+          <!-- 오늘의 스케줄 -->
+          <div class="card today-card">
+            <div class="t-label">TODAY · <b>오늘의 스케줄</b></div>
+            <div class="t-main">
+              <div class="t-num" id="todayNum">--</div>
+              <div class="t-sub" id="todaySub">--월<br>--요일</div>
+            </div>
+            <div class="t-evs" id="todayEvs"><div class="ev-none">일정을 불러오는 중…</div></div>
+            <div class="t-foot">
+              <div class="t-bar"><i></i></div>
+              <button class="round-btn" id="goSchedule" title="일정 전체 보기" aria-label="일정 전체 보기">›</button>
+            </div>
+          </div>
+          <!-- 내일 · 모레 -->
+          <div class="mini-col">
+            <div class="mini">
+              <span class="pill" id="tmrPill">내일</span>
+              <div class="mini-ev" id="tmrEv">…</div>
+            </div>
+            <div class="mini lav">
+              <span class="pill" id="datPill">모레</span>
+              <div class="mini-ev" id="datEv">…</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VOD 플레이어 -->
+        <div class="card vod-card">
+          <div class="vod-thumb" id="vodThumb" title="VOD 재생">
+            <div class="ph">▶</div>
+            <img id="vodThumbImg" alt="" style="display:none">
+            <div class="hover-play"><i>▶</i></div>
+          </div>
+          <div class="vod-meta">
+            <div class="txt">
+              <div class="vod-title" id="vodTitle">VOD 불러오는 중…</div>
+              <div class="vod-by">VOD · by <span data-pf="p_name">쮸</span></div>
+            </div>
+            <div class="vod-idx" id="vodIdx">- / -</div>
+          </div>
+          <div class="vod-controls">
+            <button class="vc-btn" id="vodPrev" aria-label="이전 VOD">◀◀</button>
+            <button class="vc-play" id="vodPlay" aria-label="VOD 재생">▶</button>
+            <button class="vc-btn" id="vodNext" aria-label="다음 VOD">▶▶</button>
+          </div>
+          <div class="vod-line"><i></i></div>
+        </div>
+
+        <!-- 이름 카드 -->
+        <div class="card name-card">
+          <div class="name-title">
+            <span class="star">✦</span> <span data-pf="p_name">쮸</span> <span class="en" data-pf="p_name_en">Zuu</span> <span class="star">✦</span>
+          </div>
+          <p class="name-desc" data-pf="p_desc">노래하는 걸 제일 좋아하는 버튜버, 쮸에요.</p>
+          <div class="name-actions">
+            <a class="btn-pink" data-station href="https://www.sooplive.com/station/jjuppi1022" target="_blank" rel="noopener">🎬 방송국 바로가기</a>
+            <span class="dots-deco">···</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 우측: 배너 데코 (아바타는 뒤 고정 레이어) -->
+      <div class="hero-right">
+        <div class="deco-copy">
+          <div class="l1" data-pf="p_deco_main">let's be
+friends +</div>
+          <span class="pill" data-pf="p_deco_pill">쮸에요 ♡</span>
+        </div>
+        <div class="avatar-hint" id="avatarHint">
+          <div class="big">🎀</div>
+          <p>메인 아바타 이미지 자리<br><code>assets/avatar.webp</code> 또는 <code>assets/avatar.png</code><br>업로드하면 전체 배경에 표시돼요</p>
+        </div>
+        <div class="side-tab">0<b>1</b>. My Profile <b>♥</b></div>
+        <div class="float-btns">
+          <a class="fb" data-station href="https://www.sooplive.com/station/jjuppi1022" target="_blank" rel="noopener" title="방송국 놀러가기" aria-label="방송국 놀러가기">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.4"/><path d="M3.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5"/><path d="M18 6v6M21 9h-6"/></svg>
+          </a>
+          <button class="fb" id="floatMail" title="문의하기" aria-label="문의하기">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.3c0 4-4 7.2-9 7.2-1 0-1.9-.1-2.8-.3L4 20l1.4-3.4C4 15.2 3 13.4 3 11.3c0-4 4-7.2 9-7.2s9 3.2 9 7.2Z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 하단 어바웃미 · 갤러리 (2/3) -->
+    <div class="bottom">
+      <div class="card info-card">
+        <h3>About Me</h3>
+        <p class="about-desc" data-pf="p_about">영원한 20살! 노래와 수다를 사랑하는 버튜버 쮸에요. 오늘도 둥이들과 함께 반짝이는 하루 보내는 중 ✨</p>
+        <div class="about-rows">
+          <div><b>🎂 생일</b> <span data-pf="p_birthday">10.22</span></div>
+          <div><b>💠 MBTI</b> <span data-pf="p_mbti">ENFJ</span></div>
+          <div><b>🌙 데뷔</b> <span data-pf="p_debut">2025.6.21</span></div>
+          <div><b>💗 팬네임</b> <span data-pf="p_fanname">둥이</span></div>
+        </div>
+        <div class="chips" id="chipBox">
+          <span class="chip">소통</span><span class="chip">노래</span><span class="chip">종합게임</span>
+          <span class="chip">ASMR</span><span class="chip">Kpop</span><span class="chip">Jpop</span>
+        </div>
+      </div>
+      <div class="card info-card">
+        <h3>갤러리 <span class="see" id="galSeeAll">See All ›</span></h3>
+        <div class="gal-grid" id="galMain">
+          <div class="gal-thumb g1">🌸</div>
+          <div class="gal-thumb g2">☁️</div>
+          <div class="gal-thumb g3">🎀</div>
+        </div>
+      </div>
+      <div class="ghost"></div>
+    </div>
+  </section>
+
+  <!-- ═══ 노래책 패널 ═══ -->
+  <section id="panel-song" class="panel" hidden>
+    <div class="sched-head">
+      <h2>🎵 <span data-pf="p_name">쮸</span>의 <b>노래책</b><span class="cnt-badge" id="songCount">0곡</span></h2>
+      <button class="btn-pink" id="songRandomBtn" style="margin-left:auto">🎲 랜덤 추천</button>
+    </div>
+    <div class="tool-row">
+      <input class="search-input" id="songSearch" placeholder="🔍 가수 · 제목 검색" autocomplete="off">
+      <div class="ftabs" id="genreTabs">
+        <button class="ftab active" data-genre="all">전체</button>
+        <button class="ftab" data-genre="kpop">Kpop</button>
+        <button class="ftab" data-genre="jpop">Jpop</button>
+        <button class="ftab" data-genre="pop">Pop</button>
+        <button class="ftab" data-genre="etc">기타</button>
+      </div>
+    </div>
+    <div class="card glass song-box">
+      <table class="song-table">
+        <thead><tr><th>가수</th><th>제목</th><th style="text-align:center">장르</th><th style="text-align:center">숙련도</th><th>메모</th><th></th></tr></thead>
+        <tbody id="songTbody"></tbody>
+      </table>
+      <div class="state-empty" id="songEmpty" style="display:none">아직 등록된 노래가 없어요 🎤</div>
+      <div class="state-empty" id="songNoRes" style="display:none">검색 결과가 없어요 ☁️</div>
+    </div>
+    <div class="pagination" id="songPager"></div>
+  </section>
+
+  <!-- ═══ 업보 패널 ═══ -->
+  <section id="panel-upbo" class="panel" hidden>
+    <div class="sched-head">
+      <h2>🏆 <span data-pf="p_name">쮸</span>의 <b>업보</b><span class="cnt-badge" id="upboCount">0명</span></h2>
+      <span class="upd-label" id="upboUpdated"></span>
+    </div>
+    <div class="tool-row">
+      <input class="search-input" id="upboSearch" placeholder="🔍 닉네임 · 아이디 검색" autocomplete="off">
+    </div>
+    <div class="member-grid" id="memberGrid"></div>
+    <div class="state-empty" id="upboEmpty" style="display:none">아직 업보 대상자가 없어요 🪙</div>
+    <div class="pagination" id="upboPager"></div>
+  </section>
+
+  <!-- ═══ 일정 패널 ═══ -->
+  <section id="panel-schedule" class="panel" hidden>
+    <div class="sched-head">
+      <h2>📅 <span data-pf="p_name">쮸</span>의 <b>일정</b></h2>
+      <div class="month-nav">
+        <button id="prevMonth" aria-label="이전 달">‹</button>
+        <strong id="calLabel" style="font-size:.95rem;min-width:110px;text-align:center">----년 --월</strong>
+        <button id="nextMonth" aria-label="다음 달">›</button>
+      </div>
+    </div>
+    <div class="legend" id="calLegend"></div>
+    <div class="card glass cal-card">
+      <div class="cal-week"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+    <h2 style="font-size:1.05rem;font-weight:800;margin:26px 0 4px">🕒 다가오는 일정</h2>
+    <div class="up-list" id="upList"><div class="up-empty">불러오는 중…</div></div>
+  </section>
+
+  <footer data-pf="p_footer">© 2026 쮸 · Zuu 💗</footer>
+</div>
+
+<!-- ═══ VOD 플레이어 모달 ═══ -->
+<div class="modal" id="vodModal">
+  <div class="modal-card wide">
+    <button class="m-close" data-close="vodModal" aria-label="닫기">✕</button>
+    <div class="vod-frame" id="vodFrame"></div>
+    <div class="vm-title" id="vmTitle"></div>
+    <a class="vm-link" id="vmLink" href="#" target="_blank" rel="noopener">SOOP에서 보기 ›</a>
+  </div>
+</div>
+
+<!-- ═══ 문의 모달 ═══ -->
+<div class="modal" id="mailModal">
+  <div class="modal-card">
+    <button class="m-close" data-close="mailModal" aria-label="닫기">✕</button>
+    <div class="m-title">💌 문의하기</div>
+    <div class="f-field">
+      <label for="inqName">닉네임</label>
+      <input id="inqName" maxlength="40" placeholder="닉네임을 알려주세요">
+    </div>
+    <div class="f-field">
+      <label for="inqContact">연락처 · 답변 받을 곳 <span style="font-weight:500">(선택)</span></label>
+      <input id="inqContact" maxlength="80" placeholder="이메일, 디스코드 등">
+    </div>
+    <div class="f-field">
+      <label for="inqMsg">내용</label>
+      <textarea id="inqMsg" rows="5" maxlength="1000" placeholder="문의 내용을 적어주세요"></textarea>
+    </div>
+    <button class="f-submit" id="inqSubmit">보내기</button>
+  </div>
+</div>
+
+<!-- ═══ 갤러리 전체보기 모달 ═══ -->
+<div class="modal" id="galModal">
+  <div class="modal-card gal-wide">
+    <button class="m-close" data-close="galModal" aria-label="닫기">✕</button>
+    <div class="m-title">🌸 갤러리</div>
+    <div class="gal-modal-grid" id="galAll"></div>
+    <p class="gal-note" id="galNote" style="display:none">갤러리 이미지는 곧 채워질 예정이에요!</p>
+  </div>
+</div>
+
+<!-- ═══ 날짜 상세 모달 ═══ -->
+<div class="modal" id="dayModal">
+  <div class="modal-card">
+    <button class="m-close" data-close="dayModal" aria-label="닫기">✕</button>
+    <div class="m-title" id="dayModalTitle">일정</div>
+    <div class="day-ev-list" id="dayModalList"></div>
+  </div>
+</div>
+
+<!-- ═══ 업보 멤버 상세 모달 ═══ -->
+<div class="modal" id="memberModal">
+  <div class="modal-card">
+    <button class="m-close" data-close="memberModal" aria-label="닫기">✕</button>
+    <div class="mm-head">
+      <div class="mm-avatar" id="mmAvatar">🐰</div>
+      <div>
+        <div class="mm-nick" id="mmNick"></div>
+        <div class="mm-uid" id="mmUid"></div>
+        <div id="mmCoin" style="margin-top:4px"></div>
+      </div>
+    </div>
+    <div class="task-list" id="mmTasks"></div>
+  </div>
+</div>
+
+<!-- ═══ 랜덤 노래 모달 ═══ -->
+<div class="modal" id="randModal">
+  <div class="modal-card">
+    <button class="m-close" data-close="randModal" aria-label="닫기">✕</button>
+    <div class="rand-body">
+      <div style="font-size:2.4rem;margin-bottom:8px">🎲</div>
+      <div class="g" id="randGenre"></div>
+      <div class="a" id="randArtist"></div>
+      <div class="t" id="randTitle"></div>
+      <div class="m" id="randMemo"></div>
+      <div class="rand-acts">
+        <button class="btn-pink" id="randCopy">복사</button>
+        <button class="btn-line" id="randAgain">다시</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 라이트박스 ═══ -->
+<div id="lightbox">
+  <button class="lb-close" aria-label="닫기">✕</button>
+  <img id="lbImg" alt="">
+  <div class="lb-cap" id="lbCap" style="display:none"></div>
+</div>
+
+<div id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ═══════════ 설정 ═══════════ */
+const SOOP_ID = 'jjuppi1022';
+const SUPABASE_URL = 'https://ebenkpehcdlifzysvcad.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImViZW5rcGVoY2RsaWZ6eXN2Y2FkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ2NzQ4NTYsImV4cCI6MjEwMDI1MDg1Nn0.g8r0c-j2prPexz3tK5Z-HCq4mlQE29JS1-cAtGfY1-8';
+const VOD_SEED = [
+  { vod_id: '199270475', title: '큐피 - Antifreeze Cover' },
+  { vod_id: '194780409', title: 'HONEYZ - 사랑 받을 준비완료' },
+  { vod_id: '194575887', title: 'VAUNDY - 踊り子 (무희)' },
+];
+
+let sb = null;
+try { sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch (e) { console.warn('supabase init fail', e); }
+
+/* ═══════════ 헬퍼 ═══════════ */
+const $ = s => document.querySelector(s);
+const WD = ['일','월','화','수','목','금','토'];
+const MO_EN = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+function kstNow(){ const n = new Date(); return new Date(n.getTime() + n.getTimezoneOffset()*60000 + 9*3600000); }
+function dstr(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._tm); t._tm = setTimeout(()=>t.classList.remove('show'), 2400); }
+function avatarUrl(uid){ if(!uid) return null; return 'https://profile.img.sooplive.com/LOGO/' + uid.substring(0,2) + '/' + uid + '/' + uid + '.jpg'; }
+
+const TYPE_COLORS = {'broadcast':'#ff9ec6','rest':'#cfc7cc','休放':'#cfc7cc','event':'#bda9ee','collab':'#8fd4cd','tournament':'#93c5f2','other':'#ffcf8e'};
+const TYPE_LABELS = {'broadcast':'방송','rest':'휴방','event':'이벤트','collab':'합방','tournament':'대회','other':'기타'};
+function evColor(ev){ return ev.color || TYPE_COLORS[ev.event_type] || '#ff9ec6'; }
+function evLabel(ev){ return TYPE_LABELS[ev.event_type] || (ev.event_type === '休放' ? '휴방' : ev.event_type) || '방송'; }
+function isRest(ev){ return ev.event_type === 'rest' || ev.event_type === '休放'; }
+function tstr(ev){ return ev.event_time ? ev.event_time.slice(0,5) : ''; }
+function textOn(hex){
+  try{ const h = hex.replace('#',''); const r = parseInt(h.substr(0,2),16), g = parseInt(h.substr(2,2),16), b = parseInt(h.substr(4,2),16);
+    return (r*0.299 + g*0.587 + b*0.114) > 165 ? '#4d4148' : '#ffffff'; }catch(e){ return '#4d4148'; }
+}
+
+/* ═══════════ 프로필 동적 로딩 (site_settings) ═══════════ */
+async function loadProfileSettings(){
+  if (!sb) return;
+  try{
+    const { data } = await sb.from('site_settings').select('key,value');
+    if (!data) return;
+    const s = {}; data.forEach(r => s[r.key] = r.value);
+    document.querySelectorAll('[data-pf]').forEach(el => {
+      const v = s[el.dataset.pf];
+      if (v != null && String(v).trim() !== '') el.textContent = v;
+    });
+    if (s.p_chips && s.p_chips.trim()){
+      $('#chipBox').innerHTML = s.p_chips.split(',').map(c => c.trim()).filter(Boolean)
+        .map(c => '<span class="chip">' + esc(c) + '</span>').join('');
+    }
+    if (s.p_station_url && s.p_station_url.trim()){
+      document.querySelectorAll('[data-station]').forEach(a => a.href = s.p_station_url.trim());
+    }
+  }catch(e){ console.warn(e); }
+}
+
+/* ═══════════ SPA 탭 전환 ═══════════ */
+const TAB_IDS = ['profile','song','upbo','schedule'];
+let schedLoaded = false, songLoaded = false, upboLoaded = false;
+function switchTab(tab){
+  if (!TAB_IDS.includes(tab)) tab = 'profile';
+  TAB_IDS.forEach(t => { const p = document.getElementById('panel-' + t); if (p) p.hidden = (t !== tab); });
+  document.body.classList.toggle('pf', tab === 'profile');
+  document.querySelectorAll('#mainTabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  if (tab === 'schedule' && !schedLoaded){ schedLoaded = true; loadMonth(); loadUpcoming(); }
+  if (tab === 'song' && !songLoaded){ songLoaded = true; loadSongs(); }
+  if (tab === 'upbo' && !upboLoaded){ upboLoaded = true; loadUpbo(); }
+  if (location.hash !== '#' + tab){ history.replaceState(null, '', '#' + tab); }
+  window.scrollTo({ top: 0 });
+}
+document.querySelectorAll('#mainTabs button').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
+$('#goSchedule').addEventListener('click', () => switchTab('schedule'));
+window.addEventListener('hashchange', () => switchTab(location.hash.replace('#','')));
+
+/* ═══════════ 오늘 · 내일 · 모레 ═══════════ */
+async function loadNear(){
+  const base = kstNow();
+  const days = [0,1,2].map(i => { const d = new Date(base); d.setDate(d.getDate()+i); return d; });
+  let rows = [];
+  if (sb){
+    try{
+      const { data } = await sb.from('schedules').select('*')
+        .gte('event_date', dstr(days[0])).lte('event_date', dstr(days[2]))
+        .order('event_date').order('event_time');
+      rows = data || [];
+    }catch(e){ console.warn(e); }
+  }
+  renderToday(days[0], rows.filter(r => r.event_date === dstr(days[0])));
+  renderMini('tmr', '내일', days[1], rows.filter(r => r.event_date === dstr(days[1])));
+  renderMini('dat', '모레', days[2], rows.filter(r => r.event_date === dstr(days[2])));
+}
+function renderToday(d, evs){
+  $('#todayNum').textContent = d.getDate();
+  $('#todaySub').innerHTML = (d.getMonth()+1) + '월<br>' + WD[d.getDay()] + '요일';
+  const box = $('#todayEvs');
+  if (!evs.length){ box.innerHTML = '<div class="ev-none">오늘은 등록된 일정이 없어요 ☁️</div>'; return; }
+  const top = evs.slice(0,3);
+  box.innerHTML = top.map(ev => {
+    const c = evColor(ev);
+    const time = isRest(ev) || !ev.event_time ? '' : '<time>' + tstr(ev) + '</time>';
+    const memo = isRest(ev) && ev.description ? ' · ' + esc(ev.description) : '';
+    return '<div class="ev-chip"><i class="dot" style="background:' + c + '"></i>' + time + '<span>' + esc(ev.title) + memo + '</span></div>';
+  }).join('') + (evs.length > 3 ? '<div class="ev-none">+ ' + (evs.length-3) + '건 더 있어요</div>' : '');
+}
+function renderMini(key, label, d, evs){
+  document.getElementById(key + 'Pill').textContent = label + ' · ' + WD[d.getDay()];
+  const el = document.getElementById(key + 'Ev');
+  if (!evs.length){ el.innerHTML = '일정 없음 <small>' + (d.getMonth()+1) + '.' + d.getDate() + '</small>'; return; }
+  const first = evs[0];
+  const t = (!isRest(first) && first.event_time) ? tstr(first) + ' ' : '';
+  const more = evs.length > 1 ? ' 외 ' + (evs.length-1) + '건' : '';
+  el.innerHTML = esc(t + first.title) + more + '<small>' + (d.getMonth()+1) + '.' + d.getDate() + ' · ' + evLabel(first) + '</small>';
+}
+
+/* ═══════════ 일정 탭 — 월 캘린더 ═══════════ */
+let calY, calM, monthEvs = [];
+function loadMonth(y, m){
+  const now = kstNow();
+  calY = (y == null) ? now.getFullYear() : y;
+  calM = (m == null) ? now.getMonth() : m;
+  renderMonth();
+}
+async function renderMonth(){
+  $('#calLabel').textContent = calY + '년 ' + (calM+1) + '월';
+  const first = new Date(calY, calM, 1);
+  const last = new Date(calY, calM+1, 0);
+  monthEvs = [];
+  if (sb){
+    try{
+      const { data } = await sb.from('schedules').select('*')
+        .gte('event_date', dstr(first)).lte('event_date', dstr(last))
+        .order('event_date').order('event_time');
+      monthEvs = data || [];
+    }catch(e){ console.warn(e); }
+  }
+  const grid = $('#calGrid');
+  const todayS = dstr(kstNow());
+  let html = '';
+  for (let i = 0; i < first.getDay(); i++) html += '<div class="cal-cell blank"></div>';
+  for (let day = 1; day <= last.getDate(); day++){
+    const ds = dstr(new Date(calY, calM, day));
+    const dow = new Date(calY, calM, day).getDay();
+    const evs = monthEvs.filter(e => e.event_date === ds);
+    const cls = ['cal-cell'];
+    if (dow === 0) cls.push('sun'); if (dow === 6) cls.push('sat');
+    if (ds === todayS) cls.push('today-cell');
+    let chips = evs.slice(0,2).map(ev => {
+      const c = evColor(ev);
+      const t = (!isRest(ev) && ev.event_time) ? tstr(ev) + ' ' : '';
+      const memo = (isRest(ev) && ev.description) ? ' · ' + esc(ev.description) : '';
+      return '<div class="cal-ev" style="background:' + c + ';color:' + textOn(c) + '">' + t + esc(ev.title) + memo + '</div>';
+    }).join('');
+    if (evs.length > 2) chips += '<div class="cal-more">+' + (evs.length-2) + '</div>';
+    html += '<div class="' + cls.join(' ') + '" data-date="' + ds + '" data-cnt="' + evs.length + '"' +
+      (evs.length ? ' style="cursor:pointer"' : '') + '><span class="d">' + day + '</span>' + chips + '</div>';
+  }
+  grid.innerHTML = html;
+  grid.querySelectorAll('.cal-cell[data-cnt]').forEach(cell => {
+    if (Number(cell.dataset.cnt) > 0) cell.addEventListener('click', () => openDayModal(cell.dataset.date));
+  });
+  $('#calLegend').innerHTML = Object.keys(TYPE_LABELS).map(k =>
+    '<span><i style="background:' + TYPE_COLORS[k] + '"></i>' + TYPE_LABELS[k] + '</span>').join('');
+}
+$('#prevMonth').addEventListener('click', () => { calM--; if (calM < 0){ calM = 11; calY--; } renderMonth(); });
+$('#nextMonth').addEventListener('click', () => { calM++; if (calM > 11){ calM = 0; calY++; } renderMonth(); });
+
+function openDayModal(ds){
+  const evs = monthEvs.filter(e => e.event_date === ds);
+  const d = new Date(ds + 'T00:00:00');
+  $('#dayModalTitle').textContent = (d.getMonth()+1) + '월 ' + d.getDate() + '일 (' + WD[d.getDay()] + ') 일정';
+  $('#dayModalList').innerHTML = evs.map(ev => {
+    const c = evColor(ev);
+    const t = (!isRest(ev) && ev.event_time) ? '<time>' + tstr(ev) + '</time>' : '';
+    const memo = ev.description ? '<span class="memo"> · ' + esc(ev.description) + '</span>' : '';
+    return '<div class="day-ev"><i class="dot" style="background:' + c + '"></i>' + t + '<span>' + esc(ev.title) + memo + '</span></div>';
+  }).join('');
+  openM('dayModal');
+}
+
+/* ═══════════ 다가오는 일정 ═══════════ */
+async function loadUpcoming(){
+  const list = $('#upList');
+  let rows = [];
+  if (sb){
+    try{
+      const start = kstNow(); const end = new Date(start); end.setDate(end.getDate() + 60);
+      const { data } = await sb.from('schedules').select('*')
+        .gte('event_date', dstr(start)).lte('event_date', dstr(end))
+        .order('event_date').order('event_time').limit(30);
+      rows = (data || []).slice(0, 7);
+    }catch(e){ console.warn(e); }
+  }
+  if (!rows.length){ list.innerHTML = '<div class="up-empty">다가오는 일정이 아직 없어요 ☁️</div>'; return; }
+  const todayS = dstr(kstNow());
+  list.innerHTML = rows.map(ev => {
+    const d = new Date(ev.event_date + 'T00:00:00');
+    const c = evColor(ev);
+    const t = (!isRest(ev) && ev.event_time) ? '<time>🕒 ' + tstr(ev) + '</time>' : '';
+    const memo = ev.description ? '<div class="up-memo">' + esc(ev.description) + '</div>' : '';
+    const todayBadge = ev.event_date === todayS ? '<span class="up-today">오늘</span>' : '';
+    return '<div class="up-row"><div class="up-date"><div class="n">' + d.getDate() + '</div>' +
+      '<div class="m">' + MO_EN[d.getMonth()] + ' · ' + WD[d.getDay()] + '</div></div>' +
+      '<div class="up-body"><div class="up-title">' + t + esc(ev.title) + '</div>' + memo + '</div>' +
+      '<span class="up-badge" style="background:' + c + ';color:' + textOn(c) + '">' + evLabel(ev) + '</span>' + todayBadge + '</div>';
+  }).join('');
+}
+
+/* ═══════════ 노래책 (두미 로직 · 25곡/페이지) ═══════════ */
+const GENRE_LABELS = { kpop:'Kpop', jpop:'Jpop', pop:'Pop', etc:'기타' };
+const SONG_PAGE = 25;
+let allSongs = [], songGenre = 'all', songSearch = '', songPage = 1;
+function genreClass(g){ return ({kpop:'gb-kpop',jpop:'gb-jpop',pop:'gb-pop'})[g] || 'gb-etc'; }
+function starsHTML(n){
+  const c = Math.min(Math.max(parseInt(n)||0,0),5); let s = '<span class="stars">';
+  for (let i=1;i<=5;i++) s += '<span class="' + (i<=c?'star-on':'star-off') + '">' + (i<=c?'★':'☆') + '</span>';
+  return s + '</span>';
+}
+async function loadSongs(){
+  if (sb){
+    try{
+      const { data, error } = await sb.from('songs').select('*').order('sort_order').order('artist');
+      if (!error) allSongs = data || [];
+    }catch(e){ console.warn(e); }
+  }
+  renderSongs();
+}
+function songFiltered(){
+  const q = songSearch.trim().toLowerCase();
+  return allSongs.filter(s =>
+    (songGenre === 'all' || s.genre === songGenre) &&
+    (!q || (s.artist||'').toLowerCase().includes(q) || (s.title||'').toLowerCase().includes(q)));
+}
+function renderSongs(){
+  $('#songCount').textContent = allSongs.length + '곡';
+  const tbody = $('#songTbody');
+  const filtered = songFiltered();
+  $('#songEmpty').style.display = allSongs.length ? 'none' : 'block';
+  $('#songNoRes').style.display = (allSongs.length && !filtered.length) ? 'block' : 'none';
+  if (!filtered.length){ tbody.innerHTML = ''; renderPager('songPager', 0, songPage, goSongPage); return; }
+  const totalPages = Math.ceil(filtered.length / SONG_PAGE);
+  if (songPage > totalPages) songPage = 1;
+  const paged = filtered.slice((songPage-1)*SONG_PAGE, songPage*SONG_PAGE);
+  tbody.innerHTML = paged.map((s, i) => {
+    return '<tr><td class="st-artist">' + esc(s.artist) + '</td>' +
+      '<td class="st-title">' + esc(s.title) + '</td>' +
+      '<td style="text-align:center"><span class="genre-badge ' + genreClass(s.genre) + '">' + (GENRE_LABELS[s.genre] || esc(s.genre) || '기타') + '</span></td>' +
+      '<td style="text-align:center">' + starsHTML(s.level) + '</td>' +
+      '<td class="st-memo">' + esc(s.memo || '') + '</td>' +
+      '<td style="text-align:center"><button class="copy-btn" data-copy="' + esc((s.artist||'') + ' - ' + (s.title||'')) + '">복사</button></td></tr>';
+  }).join('');
+  renderPager('songPager', totalPages, songPage, goSongPage);
+}
+function goSongPage(n){ songPage = n; renderSongs(); document.querySelector('.song-box').scrollIntoView({behavior:'smooth', block:'start'}); }
+$('#songSearch').addEventListener('input', e => { songSearch = e.target.value; songPage = 1; renderSongs(); });
+$('#genreTabs').addEventListener('click', e => {
+  const t = e.target.closest('.ftab'); if (!t) return;
+  document.querySelectorAll('#genreTabs .ftab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active'); songGenre = t.dataset.genre; songPage = 1; renderSongs();
+});
+$('#songTbody').addEventListener('click', e => {
+  const b = e.target.closest('.copy-btn'); if (!b) return;
+  copyText(b.dataset.copy).then(() => { b.textContent = '✓'; b.classList.add('copied');
+    setTimeout(() => { b.textContent = '복사'; b.classList.remove('copied'); }, 1500);
+  }).catch(() => toast('복사에 실패했어요'));
+});
+let randSong = null;
+function pickRandom(){
+  const pool = songFiltered();
+  if (!pool.length){ toast('추천할 노래가 없어요 🎤'); return; }
+  randSong = pool[Math.floor(Math.random()*pool.length)];
+  $('#randGenre').textContent = GENRE_LABELS[randSong.genre] || randSong.genre || '기타';
+  $('#randArtist').textContent = randSong.artist || '';
+  $('#randTitle').textContent = randSong.title || '';
+  $('#randMemo').textContent = randSong.memo || '';
+  openM('randModal');
+}
+$('#songRandomBtn').addEventListener('click', pickRandom);
+$('#randAgain').addEventListener('click', pickRandom);
+$('#randCopy').addEventListener('click', () => {
+  if (!randSong) return;
+  copyText((randSong.artist||'') + ' - ' + (randSong.title||'')).then(() => { toast('복사했어요 🎵'); closeM('randModal'); });
+});
+
+/* ═══════════ 업보 (두미 로직 · 20명/페이지) ═══════════ */
+const UPBO_PAGE = 20;
+let allMembers = [], memberTasks = {}, upboPage = 1, upboList = [];
+function nickRank(s){
+  const c = (s||'').trim().charAt(0);
+  if (/[가-힣ㄱ-ㅎㅏ-ㅣ]/.test(c)) return 0;
+  if (/[A-Za-z]/.test(c)) return 1;
+  return 2;
+}
+function totalQtyOf(m){ return (memberTasks[m.id]||[]).reduce((s,t) => s + (t.quantity||1), 0); }
+function dispNick(m){ return m.soopNick || m.nickname; }
+function memberSort(a, b){
+  const ha = totalQtyOf(a) > 0 ? 0 : 1, hb = totalQtyOf(b) > 0 ? 0 : 1;
+  if (ha !== hb) return ha - hb;
+  const ra = nickRank(dispNick(a)), rb = nickRank(dispNick(b));
+  if (ra !== rb) return ra - rb;
+  return dispNick(a).localeCompare(dispNick(b), 'ko');
+}
+async function loadUpbo(){
+  if (sb){
+    try{
+      const [{ data: st }, { data: members }, { data: tasks }] = await Promise.all([
+        sb.from('upbo_settings').select('*').eq('key','last_updated').maybeSingle(),
+        sb.from('upbo_members').select('*').order('sort_order').order('nickname'),
+        sb.from('upbo_tasks').select('*, upbo_task_types(id,name,category,sort_order)').gt('quantity', 0)
+      ]);
+      if (st && st.value) $('#upboUpdated').textContent = '갱신일: ' + st.value;
+      memberTasks = {};
+      (tasks||[]).forEach(t => { (memberTasks[t.member_id] = memberTasks[t.member_id] || []).push(t); });
+      allMembers = (members||[]).filter(m => ((memberTasks[m.id] && memberTasks[m.id].length) || m.coins > 0) && !m.is_hidden).sort(memberSort);
+    }catch(e){ console.warn(e); }
+  }
+  renderUpbo(allMembers);
+  hydrateNicks();
+}
+function upboFiltered(){
+  const q = $('#upboSearch').value.toLowerCase().trim();
+  if (!q) return allMembers;
+  return allMembers.filter(m => dispNick(m).toLowerCase().includes(q) || (m.user_id||'').toLowerCase().includes(q));
+}
+function renderUpbo(list){
+  upboList = list;
+  $('#upboCount').textContent = allMembers.length + '명';
+  const grid = $('#memberGrid');
+  $('#upboEmpty').style.display = list.length ? 'none' : 'block';
+  if (!list.length){ grid.innerHTML = ''; renderPager('upboPager', 0, upboPage, goUpboPage); return; }
+  const totalPages = Math.ceil(list.length / UPBO_PAGE);
+  if (upboPage > totalPages) upboPage = 1;
+  const paged = list.slice((upboPage-1)*UPBO_PAGE, upboPage*UPBO_PAGE);
+  grid.innerHTML = paged.map(m => {
+    const totalQty = totalQtyOf(m);
+    const url = avatarUrl(m.user_id);
+    const img = url ? '<img src="' + url + '" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><span style="display:none">🐰</span>' : '<span>🐰</span>';
+    return '<div class="member-card" data-mid="' + esc(m.id) + '">' +
+      '<div class="member-avatar">' + img + '</div>' +
+      '<div class="member-nick">' + esc(dispNick(m)) + '</div>' +
+      (m.user_id ? '<div class="member-id">(' + esc(m.user_id) + ')</div>' : '') +
+      '<div class="count-row"><span class="member-count">업보 ' + totalQty + '</span>' +
+      (m.coins > 0 ? '<span class="coin-count">🪙 ' + m.coins + '</span>' : '') + '</div></div>';
+  }).join('');
+  renderPager('upboPager', totalPages, upboPage, goUpboPage);
+}
+function goUpboPage(n){ upboPage = n; renderUpbo(upboList); document.getElementById('memberGrid').scrollIntoView({behavior:'smooth', block:'start'}); }
+$('#upboSearch').addEventListener('input', () => { upboPage = 1; renderUpbo(upboFiltered()); });
+$('#memberGrid').addEventListener('click', e => {
+  const card = e.target.closest('.member-card'); if (!card) return;
+  openMemberModal(card.dataset.mid);
+});
+async function hydrateNicks(){
+  const targets = allMembers.filter(m => m.user_id);
+  if (!targets.length) return;
+  await Promise.allSettled(targets.map(async m => {
+    try{
+      const r = await fetch('/api/soop-nick?id=' + encodeURIComponent(m.user_id));
+      const j = await r.json();
+      if (j && j.nick) m.soopNick = j.nick;
+    }catch(e){}
+  }));
+  allMembers.sort(memberSort);
+  renderUpbo(upboFiltered());
+}
+function openMemberModal(mid){
+  const m = allMembers.find(x => String(x.id) === String(mid));
+  if (!m) return;
+  const tasks = (memberTasks[mid] || []).slice().sort((a, b) => {
+    const na = (a.upbo_task_types && a.upbo_task_types.name) || '', nb = (b.upbo_task_types && b.upbo_task_types.name) || '';
+    const ra = nickRank(na), rb = nickRank(nb);
+    if (ra !== rb) return ra - rb;
+    return na.localeCompare(nb, 'ko');
+  });
+  const url = avatarUrl(m.user_id);
+  $('#mmAvatar').innerHTML = url ? '<img src="' + url + '" alt="" onerror="this.parentElement.innerHTML=\'🐰\'">' : '🐰';
+  $('#mmNick').textContent = dispNick(m);
+  $('#mmUid').textContent = m.user_id ? '(' + m.user_id + ')' : '';
+  $('#mmCoin').innerHTML = m.coins > 0 ? '<span class="coin-count">🪙 코인 ' + m.coins + '개</span>' : '';
+  $('#mmTasks').innerHTML = tasks.map(t => {
+    const tt = t.upbo_task_types || {};
+    const isEvent = tt.category === 'event';
+    const tags = (isEvent ? '<span class="mini-tag evt">이벤트</span>' : '') + (t.is_prepared ? '<span class="mini-tag prep">✓ 준비</span>' : '');
+    return '<div class="task-row' + (isEvent ? ' evt' : '') + (t.is_prepared ? ' prep' : '') + '">' +
+      '<div><div class="task-name">' + esc(tt.name || '') + tags + '</div>' +
+      (t.memo ? '<div class="task-memo-txt">' + esc(t.memo) + '</div>' : '') + '</div>' +
+      '<span class="task-qty">×' + (t.quantity || 1) + '</span></div>';
+  }).join('') || '<div class="state-empty" style="padding:16px 0">보유 업보가 없어요 🪙</div>';
+  openM('memberModal');
+}
+
+/* ═══════════ 페이지네이션 공통 (두미 방식) ═══════════ */
+const pagerFns = {};
+function renderPager(elId, totalPages, cur, fn){
+  pagerFns[elId] = fn;
+  const el = document.getElementById(elId);
+  if (totalPages <= 1){ el.innerHTML = ''; return; }
+  let b = '<button class="page-btn" data-p="' + (cur-1) + '"' + (cur===1?' disabled':'') + '>‹</button>';
+  const delta = 2;
+  for (let i = 1; i <= totalPages; i++){
+    if (i === 1 || i === totalPages || (i >= cur-delta && i <= cur+delta)){
+      b += '<button class="page-btn' + (i===cur?' active':'') + '" data-p="' + i + '">' + i + '</button>';
+    } else if (i === cur-delta-1 || i === cur+delta+1){ b += '<span class="page-dots">…</span>'; }
+  }
+  b += '<button class="page-btn" data-p="' + (cur+1) + '"' + (cur===totalPages?' disabled':'') + '>›</button>';
+  el.innerHTML = b;
+}
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.pagination .page-btn'); if (!btn || btn.disabled) return;
+  const fn = pagerFns[btn.closest('.pagination').id];
+  if (fn) fn(Number(btn.dataset.p));
+});
+
+/* ═══════════ 갤러리 + 라이트박스 ═══════════ */
+let galleryItems = [];
+async function loadGallery(){
+  if (sb){
+    try{
+      const { data, error } = await sb.from('gallery_items').select('*').order('sort_order').order('created_at');
+      if (!error) galleryItems = data || [];
+    }catch(e){ console.warn(e); }
+  }
+  renderGallery();
+}
+function galThumb(item, idx){
+  return '<div class="gal-thumb" data-gi="' + idx + '"><img src="' + esc(item.image_url) + '" alt="' + esc(item.caption || '') + '" loading="lazy"></div>';
+}
+function renderGallery(){
+  const main = $('#galMain');
+  const all = $('#galAll');
+  if (!galleryItems.length){
+    main.innerHTML = '<div class="gal-thumb g1">🌸</div><div class="gal-thumb g2">☁️</div><div class="gal-thumb g3">🎀</div>';
+    all.innerHTML = '<div class="gal-thumb g1">🌸</div><div class="gal-thumb g2">☁️</div><div class="gal-thumb g3">🎀</div>' +
+      '<div class="gal-thumb g3">💗</div><div class="gal-thumb g1">🌙</div><div class="gal-thumb g2">⭐</div>';
+    $('#galNote').style.display = 'block';
+    return;
+  }
+  $('#galNote').style.display = 'none';
+  main.innerHTML = galleryItems.slice(0,3).map((it, i) => galThumb(it, i)).join('');
+  all.innerHTML = galleryItems.map((it, i) => galThumb(it, i)).join('');
+}
+function openLightbox(idx){
+  const it = galleryItems[idx];
+  if (!it) return;
+  $('#lbImg').src = it.image_url;
+  const cap = $('#lbCap');
+  if (it.caption && it.caption.trim()){ cap.textContent = it.caption; cap.style.display = 'block'; }
+  else cap.style.display = 'none';
+  $('#lightbox').style.display = 'flex';
+}
+function closeLightbox(){ $('#lightbox').style.display = 'none'; $('#lbImg').removeAttribute('src'); }
+document.addEventListener('click', e => {
+  const th = e.target.closest('.gal-thumb[data-gi]');
+  if (th){ openLightbox(Number(th.dataset.gi)); return; }
+});
+$('#lightbox').addEventListener('click', e => { if (e.target.id === 'lightbox' || e.target.closest('.lb-close')) closeLightbox(); });
+$('#galSeeAll').addEventListener('click', () => openM('galModal'));
+
+/* ═══════════ VOD ═══════════ */
+let vods = [], vi = 0;
+async function loadVods(){
+  if (sb){
+    try{
+      const { data, error } = await sb.from('vod_clips').select('*').order('sort_order').order('created_at');
+      if (!error && data && data.length) vods = data;
+    }catch(e){ console.warn(e); }
+  }
+  if (!vods.length) vods = VOD_SEED.slice();
+  vi = 0;
+  renderVod();
+}
+async function renderVod(){
+  const v = vods[vi];
+  if (!v){ $('#vodTitle').textContent = '등록된 VOD가 없어요'; return; }
+  $('#vodTitle').textContent = v.title || 'VOD';
+  $('#vodIdx').textContent = (vi+1) + ' / ' + vods.length;
+  const img = $('#vodThumbImg');
+  img.style.display = 'none'; img.removeAttribute('src');
+  let thumb = v.thumb_url || v._thumb;
+  if (!thumb && v.vod_id){
+    try{
+      const r = await fetch('/api/soop-thumb?vod_id=' + encodeURIComponent(v.vod_id));
+      if (r.ok){ const j = await r.json(); if (j.thumb){ thumb = j.thumb; v._thumb = j.thumb; } }
+    }catch(e){}
+  }
+  if (thumb && vods[vi] === v){ img.src = thumb; img.style.display = 'block'; img.onerror = () => { img.style.display = 'none'; }; }
+}
+$('#vodPrev').addEventListener('click', () => { if (!vods.length) return; vi = (vi - 1 + vods.length) % vods.length; renderVod(); });
+$('#vodNext').addEventListener('click', () => { if (!vods.length) return; vi = (vi + 1) % vods.length; renderVod(); });
+function openVodPlayer(){
+  const v = vods[vi];
+  if (!v || !v.vod_id){ toast('재생할 VOD가 없어요'); return; }
+  const url = 'https://vod.sooplive.com/player/' + v.vod_id + '/embed?showChat=false&autoPlay=true&mutePlay=false';
+  $('#vodFrame').innerHTML = '<iframe src="' + url + '" allowfullscreen allow="autoplay; clipboard-write; web-share;"></iframe>';
+  $('#vmTitle').textContent = v.title || 'VOD';
+  $('#vmLink').href = 'https://vod.sooplive.com/player/' + v.vod_id;
+  openM('vodModal');
+}
+$('#vodPlay').addEventListener('click', openVodPlayer);
+$('#vodThumb').addEventListener('click', openVodPlayer);
+
+/* ═══════════ 온에어 상태 ═══════════ */
+async function checkLive(){
+  try{
+    const r = await fetch('/api/soop-live?id=' + SOOP_ID);
+    if (!r.ok) return;
+    const j = await r.json();
+    const on = !!j.live;
+    $('#liveDot').classList.toggle('on', on);
+    $('#liveTag').classList.toggle('show', on);
+    $('.station-link').title = on ? '🔴 방송 중! 보러가기' : '방송국 바로가기';
+  }catch(e){}
+}
+
+/* ═══════════ 클립보드 (SOOP iframe 권한 대응 폴백) ═══════════ */
+function copyText(t){
+  if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t).catch(() => fallbackCopy(t));
+  return fallbackCopy(t);
+}
+function fallbackCopy(t){
+  return new Promise((res, rej) => {
+    try{
+      const ta = document.createElement('textarea'); ta.value = t;
+      ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta);
+      ta.select(); const ok = document.execCommand('copy'); ta.remove();
+      ok ? res() : rej(new Error('copy fail'));
+    }catch(e){ rej(e); }
+  });
+}
+
+/* ═══════════ 모달 공통 ═══════════ */
+function openM(id){ document.getElementById(id).style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+function closeM(id){
+  const m = document.getElementById(id);
+  m.style.display = 'none'; document.body.style.overflow = '';
+  if (id === 'vodModal') $('#vodFrame').innerHTML = '';
+}
+document.querySelectorAll('.m-close').forEach(b => b.addEventListener('click', () => closeM(b.dataset.close)));
+document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeM(m.id); }));
+window.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if ($('#lightbox').style.display === 'flex'){ closeLightbox(); return; }
+  document.querySelectorAll('.modal').forEach(m => { if (m.style.display === 'flex') closeM(m.id); });
+});
+
+/* ═══════════ 문의 ═══════════ */
+$('#mailBtn').addEventListener('click', () => openM('mailModal'));
+$('#floatMail').addEventListener('click', () => openM('mailModal'));
+$('#inqSubmit').addEventListener('click', async () => {
+  const name = $('#inqName').value.trim();
+  const contact = $('#inqContact').value.trim();
+  const message = $('#inqMsg').value.trim();
+  if (!message){ toast('문의 내용을 입력해주세요!'); return; }
+  if (!sb){ toast('전송에 실패했어요. 잠시 후 다시 시도해주세요.'); return; }
+  const btn = $('#inqSubmit'); btn.disabled = true; btn.textContent = '전송 중…';
+  try{
+    const { error } = await sb.from('inquiries').insert({ name, contact, message });
+    if (error) throw error;
+    toast('문의가 전송되었어요 💌');
+    $('#inqName').value = ''; $('#inqContact').value = ''; $('#inqMsg').value = '';
+    closeM('mailModal');
+  }catch(e){
+    console.warn(e);
+    toast('전송에 실패했어요. 잠시 후 다시 시도해주세요.');
+  }finally{ btn.disabled = false; btn.textContent = '보내기'; }
+});
+
+/* ═══════════ 초기화 ═══════════ */
+switchTab((location.hash || '#profile').replace('#',''));
+loadProfileSettings();
+loadNear();
+loadVods();
+loadGallery();
+checkLive();
+</script>
+</body>
+</html>
