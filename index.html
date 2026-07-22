@@ -40,6 +40,7 @@
   --avatar-x:55px;      /* + 오른쪽 / - 왼쪽  · 얼굴이 카드에 가리면 값을 키움 */
   --avatar-y:0px;       /* + 아래 / - 위 */
   --avatar-scale:1;     /* 1보다 크면 확대, 작으면 축소 */
+  --avatar-bottom:0px;  /* 발끝 위치 — 키우면 위로 올라옴(푸터와 겹침 줄임) */
   --glass:rgba(255,255,255,.66);
   --glass-line:rgba(247,211,227,.85);
 }
@@ -66,7 +67,7 @@ img{max-width:100%}
   background-image:radial-gradient(var(--pink-soft) 2px,transparent 2.5px);background-size:14px 14px}
 
 /* ── 전면 아바타 배경 레이어 (모든 탭 공통 · 콘텐츠 뒤) ── */
-#avatarBg{position:absolute;left:230px;right:0;top:84px;bottom:0;z-index:1;pointer-events:none}
+#avatarBg{position:absolute;left:230px;right:0;top:84px;bottom:var(--avatar-bottom);z-index:1;pointer-events:none}
 #avatarBg img{width:100%;height:100%;object-fit:contain;object-position:bottom center;
   transform:translate(var(--avatar-x),var(--avatar-y)) scale(var(--avatar-scale));transform-origin:bottom center;
   filter:drop-shadow(0 24px 44px rgba(231,93,151,.22))}
