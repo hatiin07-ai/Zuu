@@ -151,8 +151,8 @@ nav.tabs button.active{background:var(--pink-soft);color:var(--pink-deep)}
 
 /* VOD 카드 */
 .vod-row{display:flex;gap:16px;align-items:center}
-.vod-card{padding:16px;display:flex;flex-direction:column;gap:12px;flex:0 0 238px;min-width:0}
-.vod-thumb{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:16/9;background:linear-gradient(135deg,#fde3ee,#e8ddf8);cursor:pointer}
+.vod-card{padding:17px;display:flex;flex-direction:column;gap:13px;flex:0 0 268px;min-width:0}
+.vod-thumb{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:16/10;background:linear-gradient(135deg,#fde3ee,#e8ddf8);cursor:pointer}
 .vod-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .vod-thumb .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:34px;color:#fff;
   text-shadow:0 2px 10px rgba(231,93,151,.4)}
@@ -214,19 +214,22 @@ nav.tabs button.active{background:var(--pink-soft);color:var(--pink-deep)}
 
 /* ── 하단 어바웃미 · 갤러리 (2/3) ── */
 .bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:20px;align-items:stretch}
-.info-card{padding:20px 22px}
+.info-card{padding:20px 22px;display:flex;flex-direction:column;min-height:0}
 .info-card h3{font-size:1rem;font-weight:800;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
 .info-card h3 .see{font-size:.72rem;color:var(--pink-deep);font-weight:700;cursor:pointer;display:flex;align-items:center;gap:3px}
 .info-card h3 .see:hover{text-decoration:underline}
-.about-desc{font-size:.82rem;color:var(--ink);font-weight:500;line-height:1.65;word-break:keep-all;white-space:pre-line}
-.about-rows{margin-top:10px;display:flex;flex-direction:column;gap:5px;font-size:.76rem;color:var(--muted);font-weight:600}
+.about-desc{font-size:.84rem;color:var(--ink);font-weight:500;line-height:1.85;word-break:keep-all;white-space:pre-line}
+.about-rows{margin-top:16px;display:flex;flex-direction:column;gap:13px;font-size:.81rem;color:var(--muted);font-weight:600}
 .about-rows b{color:var(--pink-deep);font-weight:700;margin-right:4px}
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
-.chip{font-size:.7rem;font-weight:700;color:var(--pink-deep);background:var(--pink-pale);border:1px solid var(--pink-soft);
-  border-radius:99px;padding:5px 12px}
-.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.gal-thumb{aspect-ratio:3/4;border-radius:14px;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s;
-  display:flex;align-items:center;justify-content:center;font-size:22px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:14px}
+.chip{font-size:.72rem;font-weight:700;color:var(--pink-deep);background:var(--pink-pale);border:1px solid var(--pink-soft);
+  border-radius:99px;padding:6px 14px}
+.gal-grid{display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:1fr;gap:10px;flex:1;min-height:0;margin-top:2px}
+.gal-thumb{border-radius:14px;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s;
+  display:flex;align-items:center;justify-content:center;font-size:26px;min-height:0}
+.gal-thumb.wide{grid-column:span 2}
+.gal-more{position:absolute;inset:0;background:rgba(231,93,151,.55);color:#fff;font-size:1.4rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;letter-spacing:.5px}
 .gal-thumb:hover{transform:translateY(-3px)}
 .gal-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .g1{background:linear-gradient(160deg,#ffd9ea,#f8c1dc)}
@@ -238,6 +241,9 @@ footer{text-align:center;margin-top:34px;font-size:.75rem;color:var(--muted);fon
 
 /* ── 패널 (SPA) ── */
 .panel{min-height:var(--panel-min);display:flow-root}   /* 전 탭 높이·푸터 위치 통일 */
+#panel-profile:not([hidden]){display:flex;flex-direction:column;height:var(--panel-min)}
+#panel-profile .hero{flex:0 0 auto}
+#panel-profile .bottom{flex:1;min-height:0}   /* 남는 세로를 하단 카드가 흡수 */
 .panel[hidden]{display:none}
 
 /* ── 공통: 패널 헤더 · 검색 · 페이지네이션 ── */
@@ -1197,14 +1203,23 @@ function renderGallery(){
   const main = $('#galMain');
   const all = $('#galAll');
   if (!galleryItems.length){
-    main.innerHTML = '<div class="gal-thumb g1">🌸</div><div class="gal-thumb g2">☁️</div><div class="gal-thumb g3">🎀</div>';
+    main.innerHTML = '<div class="gal-thumb g1">🌸</div><div class="gal-thumb g2">☁️</div><div class="gal-thumb g3 wide">🎀</div>';
     all.innerHTML = '<div class="gal-thumb g1">🌸</div><div class="gal-thumb g2">☁️</div><div class="gal-thumb g3">🎀</div>' +
       '<div class="gal-thumb g3">💗</div><div class="gal-thumb g1">🌙</div><div class="gal-thumb g2">⭐</div>';
     $('#galNote').style.display = 'block';
     return;
   }
   $('#galNote').style.display = 'none';
-  main.innerHTML = galleryItems.slice(0,3).map((it, i) => galThumb(it, i)).join('');
+  const n = galleryItems.length;
+  const shown = galleryItems.slice(0, 4);
+  const rest = n - 4;
+  main.innerHTML = shown.map((it, i) => {
+    // 3개뿐이면 마지막 칸을 가로로 늘려 빈칸 없이
+    const wide = (n === 3 && i === 2) || (n === 1 && i === 0);
+    const more = (rest > 0 && i === 3) ? '<span class="gal-more">+' + rest + '</span>' : '';
+    return '<div class="gal-thumb' + (wide ? ' wide' : '') + '" data-gi="' + i + '">' +
+      '<img src="' + esc(it.image_url) + '" alt="' + esc(it.caption || '') + '" loading="lazy">' + more + '</div>';
+  }).join('');
   all.innerHTML = galleryItems.map((it, i) => galThumb(it, i)).join('');
 }
 function openLightbox(idx){
