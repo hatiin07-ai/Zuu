@@ -101,9 +101,14 @@ nav.tabs button.active{background:var(--pink-soft);color:var(--pink-deep)}
   background:#c9c2c6;border:2.5px solid #fff}
 .live-dot.on{background:#ff4d6d;animation:livePulse 1.4s ease-in-out infinite}
 @keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,77,109,.5)}50%{box-shadow:0 0 0 5px rgba(255,77,109,0)}}
-.live-tag{display:none;font-size:.58rem;font-weight:800;color:#fff;background:#ff4d6d;border-radius:6px;
-  padding:2px 6px;position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);letter-spacing:.4px}
-.live-tag.show{display:block}
+.live-tag{display:none;align-items:center;gap:6px;flex:none;font-size:.7rem;font-weight:800;color:#fff;
+  background:#ff4d6d;border-radius:999px;padding:7px 14px;letter-spacing:.6px;
+  box-shadow:0 4px 12px rgba(255,77,109,.32);transition:all .2s}
+.live-tag.show{display:inline-flex}
+.live-tag:hover{background:#f5405f;transform:translateY(-1px)}
+.live-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:#fff;flex:none;
+  animation:liveBlink 1.3s ease-in-out infinite}
+@keyframes liveBlink{0%,100%{opacity:1}50%{opacity:.3}}
 .icon-btn{width:42px;height:42px;border-radius:50%;background:var(--pink-pale);display:flex;align-items:center;justify-content:center;
   color:var(--pink-deep);transition:all .2s;flex:none}
 .icon-btn:hover{background:var(--pink-soft);transform:translateY(-1px)}
@@ -172,8 +177,12 @@ nav.tabs button.active{background:var(--pink-soft);color:var(--pink-deep)}
 .vc-play{width:46px;height:46px;border-radius:50%;background:var(--pink);color:#fff;display:flex;align-items:center;justify-content:center;
   font-size:16px;padding-left:2px;box-shadow:0 6px 16px rgba(242,123,169,.4);transition:all .2s}
 .vc-play:hover{background:var(--pink-deep);transform:scale(1.06)}
-.vod-line{height:4px;border-radius:99px;background:var(--pink-pale);overflow:hidden}
-.vod-line i{display:block;height:100%;width:26%;background:var(--pink);border-radius:99px}
+.vod-line{display:flex;gap:4px;align-items:center}
+.vod-line span{flex:1;min-width:0;padding:5px 0;cursor:pointer;display:block}
+.vod-line span i{display:block;height:4px;border-radius:99px;background:var(--pink-pale);transition:background .25s ease,height .2s ease}
+.vod-line span:hover i{background:var(--pink-soft)}
+.vod-line span.on i{background:var(--pink);height:5px}
+.vod-line span.on:hover i{background:var(--pink)}
 
 /* 이름 카드 */
 .name-card{padding:22px 24px;position:relative}
@@ -470,12 +479,12 @@ html.tab-fx #avatarBg img{filter:drop-shadow(0 26px 56px rgba(231,93,151,.32))}
       <button data-tab="schedule">일정</button>
     </nav>
     <div class="topbar-right">
+      <a class="live-tag" id="liveTag" data-station href="https://www.sooplive.com/station/zuu1028" target="_blank" rel="noopener" title="🔴 방송 중! 보러가기">ON AIR</a>
       <a class="station-link" data-station href="https://www.sooplive.com/station/zuu1028" target="_blank" rel="noopener" title="쮸 방송국 바로가기">
         <img id="stationImg" src="https://profile.img.sooplive.com/LOGO/zu/zuu1028/zuu1028.jpg" alt="쮸 방송국"
           onerror="this.style.display='none';document.getElementById('stationFb').style.display='flex'">
         <span class="station-fallback" id="stationFb">💗</span>
         <span class="live-dot" id="liveDot"></span>
-        <span class="live-tag" id="liveTag">ON AIR</span>
       </a>
       <button class="icon-btn" id="mailBtn" title="문의하기" aria-label="문의하기">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="3.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>
@@ -534,7 +543,7 @@ html.tab-fx #avatarBg img{filter:drop-shadow(0 26px 56px rgba(231,93,151,.32))}
             <button class="vc-play" id="vodPlay" aria-label="VOD 재생">▶</button>
             <button class="vc-btn" id="vodNext" aria-label="다음 VOD">▶▶</button>
           </div>
-          <div class="vod-line"><i></i></div>
+          <div class="vod-line" id="vodLine"></div>
         </div>
           <div class="deco-copy">
             <div class="l1" data-pf="p_deco_main">let's be
@@ -1345,6 +1354,7 @@ async function renderVod(){
   if (!v){ $('#vodTitle').textContent = '등록된 VOD가 없어요'; return; }
   $('#vodTitle').textContent = v.title || 'VOD';
   $('#vodIdx').textContent = (vi+1) + ' / ' + vods.length;
+  renderVodLine();
   const img = $('#vodThumbImg');
   img.style.display = 'none'; img.removeAttribute('src');
   let thumb = v.thumb_url || v._thumb;
@@ -1356,6 +1366,20 @@ async function renderVod(){
   }
   if (thumb && vods[vi] === v){ img.src = thumb; img.style.display = 'block'; img.onerror = () => { img.style.display = 'none'; }; }
 }
+/* 재생바 = VOD 개수만큼 분할 · 현재 위치 강조 · 클릭하면 그 VOD로 이동 */
+function renderVodLine(){
+  const line = $('#vodLine');
+  if (!vods.length){ line.innerHTML = ''; return; }
+  line.style.gap = (vods.length > 10 ? 2 : 4) + 'px';
+  line.innerHTML = vods.map((v, i) =>
+    '<span class="' + (i === vi ? 'on' : '') + '" data-vi="' + i + '" title="' + esc(v.title || ('VOD ' + (i+1))) + '"><i></i></span>').join('');
+}
+$('#vodLine').addEventListener('click', e => {
+  const s = e.target.closest('span[data-vi]'); if (!s) return;
+  const n = Number(s.dataset.vi);
+  if (n === vi || !vods[n]) return;
+  vi = n; renderVod();
+});
 $('#vodPrev').addEventListener('click', () => { if (!vods.length) return; vi = (vi - 1 + vods.length) % vods.length; renderVod(); });
 $('#vodNext').addEventListener('click', () => { if (!vods.length) return; vi = (vi + 1) % vods.length; renderVod(); });
 function openVodPlayer(){
