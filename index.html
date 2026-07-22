@@ -1126,7 +1126,7 @@ function goUpboPage(n){ upboPage = n; renderUpbo(upboList); document.getElementB
 $('#upboSearch').addEventListener('input', () => { upboPage = 1; renderUpbo(upboFiltered()); });
 $('#memberGrid').addEventListener('click', e => {
   const card = e.target.closest('.member-card'); if (!card) return;
-  openMemberModal(card.dataset.mid);
+  openMemberModal(card.dataset.mid, card);
 });
 async function hydrateNicks(){
   const targets = allMembers.filter(m => m.user_id);
@@ -1141,7 +1141,7 @@ async function hydrateNicks(){
   allMembers.sort(memberSort);
   renderUpbo(upboFiltered());
 }
-function openMemberModal(mid){
+function openMemberModal(mid, cardEl){
   const m = allMembers.find(x => String(x.id) === String(mid));
   if (!m) return;
   const tasks = sortTasks(memberTasks[mid] || []);
@@ -1159,8 +1159,38 @@ function openMemberModal(mid){
       (t.memo ? '<div class="task-memo-txt">' + esc(t.memo) + '</div>' : '') + '</div>' +
       '<span class="task-qty">×' + (t.quantity || 1) + '</span></div>';
   }).join('') || '<div class="state-empty" style="padding:16px 0">보유 업보가 없어요 🪙</div>';
-  
   openM('memberModal');
+  placeMemberModal(cardEl);
+}
+
+/* 모달을 클릭한 카드 행 높이에 맞춰 띄움
+   1행 → 2행 / 마지막행 → 직전행 / 그 사이 → 가운데 행 높이 */
+function placeMemberModal(cardEl){
+  const modal = $('#memberModal'), mc = modal.querySelector('.modal-card');
+  modal.style.alignItems = 'flex-start';
+  mc.style.marginTop = '';
+  if (!cardEl){ modal.style.alignItems = 'center'; return; }
+  const cards = Array.from($('#memberGrid').querySelectorAll('.member-card'));
+  const idx = cards.indexOf(cardEl); if (idx < 0){ modal.style.alignItems = 'center'; return; }
+  const COLS = 4;
+  const row = Math.floor(idx / COLS) + 1;
+  const rows = Math.ceil(cards.length / COLS);
+  let target;
+  if (rows <= 2) target = 1;
+  else if (row === 1) target = 2;
+  else if (row === rows) target = rows - 1;
+  else target = Math.ceil(rows / 2);
+  // 그리드 기준으로 행 중앙 계산 (hover transform·등장 애니메이션 영향 안 받게 offsetHeight 사용)
+  const grid = $('#memberGrid');
+  const gridTop = grid.getBoundingClientRect().top;
+  const cardH = cards[0].offsetHeight;
+  const gap = parseFloat(getComputedStyle(grid).rowGap) || 0;
+  const centerY = gridTop + (target - 1) * (cardH + gap) + cardH / 2;
+  const pad = parseFloat(getComputedStyle(modal).paddingTop) || 0;
+  const mh = mc.offsetHeight;
+  let top = centerY - mh / 2;                                          // 해당 행 중앙에 모달 중앙 맞춤
+  top = Math.max(pad, Math.min(top, window.innerHeight - mh - pad));   // 화면 밖으로 안 나가게
+  mc.style.marginTop = Math.max(0, top - pad) + 'px';
 }
 
 /* ═══════════ 페이지네이션 공통 (두미 방식) ═══════════ */
@@ -1317,6 +1347,7 @@ function closeM(id){
   const m = document.getElementById(id);
   m.style.display = 'none'; document.body.style.overflow = '';
   if (id === 'vodModal') $('#vodFrame').innerHTML = '';
+  if (id === 'memberModal'){ m.style.alignItems = 'center'; m.querySelector('.modal-card').style.marginTop = ''; }
 }
 document.querySelectorAll('.m-close').forEach(b => b.addEventListener('click', () => closeM(b.dataset.close)));
 document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeM(m.id); }));
