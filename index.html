@@ -241,6 +241,13 @@ footer{text-align:center;margin-top:34px;font-size:.75rem;color:var(--muted);fon
 
 /* ── 패널 (SPA) ── */
 .panel{min-height:var(--panel-min);display:flow-root}   /* 전 탭 높이·푸터 위치 통일 */
+.panel.leaving{opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease}
+.panel.entering{animation:panelIn .34s cubic-bezier(.2,.75,.3,1)}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+/* 전환 중엔 아바타를 살짝 키우고 그림자를 더해 시선을 잡아둠 */
+#avatarBg img{transition:transform .5s cubic-bezier(.2,.7,.3,1),filter .5s ease}
+html.tab-fx{--avatar-scale:1.025}
+html.tab-fx #avatarBg img{filter:drop-shadow(0 26px 56px rgba(231,93,151,.32))}
 #panel-profile:not([hidden]){display:flex;flex-direction:column;height:var(--panel-min)}
 #panel-profile .hero{flex:0 0 auto}
 #panel-profile .bottom{flex:1;min-height:0}   /* 남는 세로를 하단 카드가 흡수 */
@@ -275,10 +282,11 @@ footer{text-align:center;margin-top:34px;font-size:.75rem;color:var(--muted);fon
 .state-empty{text-align:center;color:var(--muted);font-size:.85rem;padding:40px 0;font-weight:600}
 
 /* ── 노래책 패널 ── */
-.song-box{padding:6px 6px 10px;overflow-x:auto}
+.song-box{padding:6px 6px 10px;overflow:hidden}
 .song-table{width:100%;border-collapse:collapse;table-layout:fixed}
-.song-table col.c-artist{width:165px} .song-table col.c-title{width:280px} .song-table col.c-genre{width:80px}
+.song-table col.c-artist{width:165px} .song-table col.c-genre{width:80px}
 .song-table col.c-level{width:100px} .song-table col.c-memo{width:175px} .song-table col.c-copy{width:84px}
+/* .c-title 은 폭 지정 없음 = 남는 폭 전부 흡수 (합계가 컨테이너를 넘지 않게) */
 .song-table th{font-size:.72rem;font-weight:800;color:var(--muted);text-align:left;padding:12px 14px;border-bottom:1.5px solid var(--glass-line);white-space:nowrap}
 .song-table td{font-size:.82rem;font-weight:600;padding:11px 14px;border-bottom:1px solid rgba(247,211,227,.5);vertical-align:middle}
 .song-table tr:last-child td{border-bottom:none}
@@ -817,16 +825,40 @@ async function loadProfileSettings(){
 
 /* ═══════════ SPA 탭 전환 ═══════════ */
 const TAB_IDS = ['profile','song','upbo','schedule'];
-let schedLoaded = false, songLoaded = false, upboLoaded = false;
-function switchTab(tab){
-  if (!TAB_IDS.includes(tab)) tab = 'profile';
+let schedLoaded = false, songLoaded = false, upboLoaded = false, tabToken = 0;
+
+function applyTab(tab){
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('leaving','entering'));
+  document.documentElement.classList.remove('tab-fx');
   TAB_IDS.forEach(t => { const p = document.getElementById('panel-' + t); if (p) p.hidden = (t !== tab); });
-  document.querySelectorAll('#mainTabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   if (tab === 'schedule' && !schedLoaded){ schedLoaded = true; loadMonth(); loadUpcoming(); }
   if (tab === 'song' && !songLoaded){ songLoaded = true; loadSongs(); }
   if (tab === 'upbo' && !upboLoaded){ upboLoaded = true; loadUpbo(); }
   if (location.hash !== '#' + tab){ history.replaceState(null, '', '#' + tab); }
   window.scrollTo({ top: 0 });
+}
+
+/* 탭 전환 페이드 — 현재 패널 살짝 사라짐 → 새 패널 부드럽게 등장 */
+function switchTab(tab, instant){
+  if (!TAB_IDS.includes(tab)) tab = 'profile';
+  document.querySelectorAll('#mainTabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  const cur = TAB_IDS.find(t => { const p = document.getElementById('panel-' + t); return p && !p.hidden; });
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (instant || reduce || !cur || cur === tab){ ++tabToken; applyTab(tab); return; }   // 예약된 전환 취소
+  const my = ++tabToken;
+  const oldPanel = document.getElementById('panel-' + cur);
+  const root = document.documentElement;
+  oldPanel.classList.add('leaving');
+  root.classList.add('tab-fx');
+  setTimeout(() => {                       // 250ms 사라짐 + 120ms 아바타만 보이는 여백
+    if (my !== tabToken){ return; }
+    applyTab(tab);
+    const p = document.getElementById('panel-' + tab);
+    void p.offsetWidth;
+    p.classList.add('entering');
+    setTimeout(() => { if (my === tabToken) root.classList.remove('tab-fx'); }, 100);
+    setTimeout(() => { if (my === tabToken) p.classList.remove('entering'); }, 360);
+  }, 370);
 }
 document.querySelectorAll('#mainTabs button').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
 $('#goSchedule').addEventListener('click', () => switchTab('schedule'));
@@ -1285,8 +1317,9 @@ function openLightbox(idx){
   if (it.caption && it.caption.trim()){ cap.textContent = it.caption; cap.style.display = 'block'; }
   else cap.style.display = 'none';
   $('#lightbox').style.display = 'flex';
+  lockScroll();
 }
-function closeLightbox(){ $('#lightbox').style.display = 'none'; $('#lbImg').removeAttribute('src'); }
+function closeLightbox(){ $('#lightbox').style.display = 'none'; $('#lbImg').removeAttribute('src'); unlockScroll(); }
 document.addEventListener('click', e => {
   const th = e.target.closest('.gal-thumb[data-gi]');
   if (th){ openLightbox(Number(th.dataset.gi)); return; }
@@ -1367,12 +1400,27 @@ function fallbackCopy(t){
 }
 
 /* ═══════════ 모달 공통 ═══════════ */
-function openM(id){ document.getElementById(id).style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+/* 스크롤 잠금 — 사라지는 스크롤바 폭만큼 padding으로 보정해 화면이 밀리지 않게 */
+function lockScroll(){
+  if (document.body.style.overflow === 'hidden') return;
+  const sbw = window.innerWidth - document.documentElement.clientWidth;
+  document.body.style.overflow = 'hidden';
+  if (sbw > 0) document.body.style.paddingRight = sbw + 'px';
+}
+function unlockScroll(){
+  const stillOpen = Array.from(document.querySelectorAll('.modal')).some(m => m.style.display === 'flex')
+    || $('#lightbox').style.display === 'flex';
+  if (stillOpen) return;
+  document.body.style.overflow = '';
+  document.body.style.paddingRight = '';
+}
+function openM(id){ document.getElementById(id).style.display = 'flex'; lockScroll(); }
 function closeM(id){
   const m = document.getElementById(id);
-  m.style.display = 'none'; document.body.style.overflow = '';
+  m.style.display = 'none';
   if (id === 'vodModal') $('#vodFrame').innerHTML = '';
   if (id === 'memberModal'){ m.style.alignItems = 'center'; m.querySelector('.modal-card').style.marginTop = ''; }
+  unlockScroll();
 }
 document.querySelectorAll('.m-close').forEach(b => b.addEventListener('click', () => closeM(b.dataset.close)));
 document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeM(m.id); }));
@@ -1405,7 +1453,7 @@ $('#inqSubmit').addEventListener('click', async () => {
 });
 
 /* ═══════════ 초기화 ═══════════ */
-switchTab((location.hash || '#profile').replace('#',''));
+switchTab((location.hash || '#profile').replace('#',''), true);
 loadProfileSettings();
 loadNear();
 loadVods();
